@@ -95,7 +95,7 @@
   font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 .dropdown-menu .dropdown-title {
-  background: none repeat scroll 0 0 #486d93;
+  background: none repeat scroll 0 0 #2C3E50;
   color: #FFFFFF;
   display: block;
   font-weight: 600;
@@ -163,33 +163,25 @@
   border-top: 1px solid #486d93;
   width: 270px;
 }
-.dropdown-menu.notification .label {
-  color: #FFFFFF;
+.dropdown-menu.notification .label-notif {
   display: inline-block;
-  margin: -1px 10px -5px -10px !important;
-  padding: 9px;
+  width: 25px;
   text-align: center;
-  width: 40px;
-  height: 42px;
-  border-radius: 0;
-  position: absolute;
-}
-.dropdown-menu.notification .label i {
-  font-size: 18px;
+  font-size: 20px;
 }
 .dropdown-menu.notification .body {
+  overflow: hidden;
   position: relative;
   display: inline-block;
   line-height: 20px;
   vertical-align: middle;
   white-space: normal;
-  margin: 5px 5px 5px 40px;
-  width: 100%;
+  margin: 5px 5px 5px 0px;
+  width: 90%;
 }
 .dropdown-menu.notification .message {
   line-height: 16px;
   display: inline-block;
-  margin: 0 5px 5px 0;
 }
 .dropdown-menu.notification .time {
   color: #777777;

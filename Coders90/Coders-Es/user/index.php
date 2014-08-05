@@ -1,8 +1,8 @@
 <?php
 	session_save_path("../sessions/");
-	error_reporting(0);
-
+	//error_reporting(0);
 	session_start();
+	require("../SQLFunc.php");
 	if(!isset($_SESSION['UserID'])){
 		header('Location: ../');
 	} else {
@@ -35,7 +35,6 @@
 			$result=mysql_query($editdata);
 
 			if ($result) {
-				require("../SQLFunc.php");
 				UserData();
 				$edit=2;
 			}else{
@@ -44,7 +43,6 @@
 
 		}
 	}
-
 ?>
 ﻿<!DOCTYPE html>
 <html lang="es">
@@ -89,6 +87,25 @@
 			</div>					
 			<!-- Menu -->					
 			<ul class="nav navbar-nav pull-right">
+				<!-- Notifications -->
+				<li class="dropdown" id="header-notification">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+						<i class="fa fa-bell"></i>
+						<span class="badge"><?php echo numberNotifications();?></span>						
+					</a>
+					<ul class="dropdown-menu notification" id="notifications">
+						<li class="dropdown-title">
+							<span><i class="fa fa-bell"></i>Notificaciones</span>
+						</li>
+						<?php
+						notifList();
+						?>
+						<li class="footer">
+							<a href="#">Todas las notificaciones <i class="fa fa-arrow-circle-right"></i></a>
+						</li>
+					</ul>
+				</li>
+				<!-- /Notifications -->
 				<!-- User Menu -->
 				<li class="dropdown user" id="header-user">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">

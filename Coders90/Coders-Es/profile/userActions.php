@@ -1,4 +1,5 @@
 <?php
+	session_save_path("../sessions/");
 	session_start();
 	$action=$_POST['action'];
 	date_default_timezone_set("America/El_Salvador");
@@ -37,6 +38,13 @@
 			
 			$query="INSERT INTO following VALUES ('','".$idf."','".$_SESSION['UserID']."','1','1')";
 			$sql=mysql_query($query,$dbconn);
+
+			//notificacion nuevo seguidor
+			$ndate=date("Y-m-d");
+			$ntime=date("H:i:s");
+			$query="INSERT INTO notifications values('','".$idf."','0','".$ndate."','".$ntime."','".$_SESSION['UserID']."','6','".$_SESSION['UserID']."')";
+			$sql=mysql_query($query,$dbconn);
+
 			break;
 
 		case "unfollow":

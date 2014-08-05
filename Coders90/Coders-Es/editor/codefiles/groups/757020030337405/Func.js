@@ -136,13 +136,3 @@ $("#targetDiv").on('click','h6',function(){
 		window.location.href = "../search/?tag="+text2+"";
 	}
 });
-
-$(".notifier").click(function(){
-	var idf=$(this).attr("idf");
-	 $.post("../notifActions.php", 
-          {idf: idf, action: "View"},
-     function() {
-        
-     }
-    );
-});

@@ -25,6 +25,7 @@
 			header("location:../dashboard/");
 		}
 	}
+	require("../SQLFunc.php");
 ?>	
 <!DOCTYPE html>
 <html lang="es">
@@ -74,6 +75,25 @@
 		
 		<!-- General Menu -->					
 		<ul class="nav navbar-nav pull-right">
+			<!-- Notifications -->
+			<li class="dropdown" id="header-notification">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+					<i class="fa fa-bell"></i>
+					<span class="badge"><?php echo numberNotifications();?></span>						
+				</a>
+				<ul class="dropdown-menu notification" id="notifications">
+					<li class="dropdown-title">
+						<span><i class="fa fa-bell"></i>Notificaciones</span>
+					</li>
+					<?php
+					notifList();
+					?>
+					<li class="footer">
+						<a href="#">Todas las notificaciones <i class="fa fa-arrow-circle-right"></i></a>
+					</li>
+				</ul>
+			</li>
+			<!-- /Notifications -->
 			<!-- User Menu -->
 			<li class="dropdown user" id="header-user">
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -214,7 +234,6 @@
 							<!-- /Post-->
 							<div id="newsFeed">
 							<?php 
-							require("../SQLFunc.php");
 							NewsFeed();
 							?>
 							</div>
@@ -317,6 +336,10 @@
 		} else {
 			$("#targetDiv").html("");
 		};
+	});
+
+	$("#add").click(function(){
+		$("#notifications").append("<li><a href='#'><span class='label label-info'><i class='fa fa-edit'></i></span><span class='body'><span class='message'>Ha creado una publicación. </span></span></a></li>");
 	});
 
 </script>
