@@ -17,6 +17,19 @@
 
 			$query="INSERT INTO postcomments values('','".$_SESSION['UserID']."','".$content."','1','".$cdate."','".$chour."','".$postIdf."')";
 			$sql=mysql_query($query,$dbconn);
+
+			//Notificaciones de comentarios
+			$mypost=strpos($postIdf, $_SESSION['UserID']);
+
+			if ($mypost===false) {
+				$user=substr($postIdf, 0,20);
+				$ndate=date("Y-m-d");
+				$ntime=date("H:i:s");
+				$query="INSERT INTO notifications values('','".$user."','0','".$ndate."','".$ntime."','".$_SESSION['UserID']."','1','".$postIdf."')";
+				$sql=mysql_query($query,$dbconn);
+			}
+			
+
 			break;
 
 		case "delComment":

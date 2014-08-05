@@ -5,6 +5,7 @@
 	if(!isset($_SESSION['UserID'])){
 		header('Location: ../');
 	}
+	date_default_timezone_set("America/El_Salvador");
 
 	if(isset($_GET['group'])){
 		include("../BDD.php");
@@ -53,6 +54,20 @@
 
 					if (move_uploaded_file($tempName, $uploadFile)) {
 					    header("Location: workspace.php?group=".$_GET['group']."&chg=1");
+
+					    //Notificaciones de subida de archivo en grupo
+						$query="SELECT UserID FROM user_group WHERE GroupID='".$_GET['group']."'";
+						$sql=mysql_query($query,$dbconn);
+
+						$udate=date("Y-m-d");
+						$uhour=date("H:i:s");
+
+						while ($row=mysql_fetch_array($sql)) {
+							if ($row[0]!=$_SESSION['UserID']) {
+								$insertNotif="INSERT INTO notifications VALUES ('','".$row[0]."','0','".$udate."','".$uhour."','".$_SESSION['UserID']."','4','".$_GET['group']."')";
+								$resNotif=mysql_query($insertNotif,$dbconn);
+							}
+						}
 					} else {
 					    header("Location: workspace.php?group=".$_GET['group']."&chg=0");
 					}

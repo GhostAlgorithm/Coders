@@ -54,6 +54,20 @@
 
 			$query="INSERT INTO postcomments_group values('','".$_SESSION['UserID']."','".$postIdf."','".$content."','".$cdate."','".$chour."','1')";
 			$sql=mysql_query($query,$dbconn);
+
+			//Notificaciones de comentarios
+			$query="SELECT UserID FROM post_group Where PostID='".$postIdf."' LIMIT 1";
+			$sql=mysql_query($query,$dbconn);
+
+			while ($row=mysql_fetch_array($sql)) {
+				$notifUser=$row[0];
+			}
+
+			if ($notifUser!=$_SESSION['UserID']) {
+				$query="INSERT INTO notifications values('','".$notifUser."','0','".$cdate."','".$chour."','".$_SESSION['UserID']."','3','".$postIdf."')";
+				$sql=mysql_query($query,$dbconn);
+			}
+
 			break;
 
 		case "delComment":
@@ -105,6 +119,7 @@
 		case "newMembers":
 			$arrayMembers=$_POST['idf'];
 			$group=$_POST['group'];
+			$new=0;
 
 			foreach ($arrayMembers as $user ) {
 				$sql="SELECT User_groupID FROM user_group WHERE UserID='".$user."'";
@@ -114,9 +129,26 @@
 				if ($total==0) {
 					$insertMember="INSERT INTO User_group VALUES ('','".$user."','".$group."')";
 					$resultInsert=mysql_query($insertMember);
-				} 				
-			}			
+					$new++;
+				}		
+			}
+
+			//Notificacion al creador de nuevos miembros del grupo
+			$sql="SELECT UserID FROM groups WHERE GroupID='".$group."' LIMIT 1";
+			$result=mysql_query($sql);
 			
+			while ($row=mysql_fetch_array($result)) {
+				$creator=$row[0];	
+			}	
+
+			$pdate=date("Y-m-d");
+			$phour=date("H:i:s");
+
+			if ($_SESSION['UserID']!=$creator) {
+				$sql="INSERT INTO notifications VALUES ('','".$creator."','0','".$pdate."','".$phour."','".$_SESSION['UserID']."','5','".$group."-".$new."')";
+				$result=mysql_query($sql);
+			}
+
 			break;	
 	}
 

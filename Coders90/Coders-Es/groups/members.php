@@ -258,11 +258,6 @@
 							}
 
 						?>
-							<!--<div class='col-md-3 col-xs-6 col-lg-2 user-container'>
-								<img class='member-img' alt='' src='../img/avatars/<?php echo $_SESSION['UserID']?>.jpg' onerror="this.src='../img/avatars/default.jpg'"/>
-								<a href='../profile/?user=' class='styleLess'><h5>Fernando Santamaría</h5></a>
-								<button class='btn btn-xs btn-info'>Eliminar</button>
-							</div>-->
 						</div>
 					</div>
 					<!-- /Contenido general --> 

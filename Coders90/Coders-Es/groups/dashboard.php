@@ -32,11 +32,21 @@
 		$post="INSERT INTO post_group (UserID, GroupID, Content, Date, Time, View) VALUES ('$user','".$_GET['group']."','$content','$pdate','$phour','1')";
 		$result=mysql_query($post,$dbconn);
 
+		//Notificaciones de publicaciones en grupos
+		$query="SELECT UserID FROM user_group WHERE GroupID='".$_GET['group']."'";
+		$sql=mysql_query($query,$dbconn);
+
+		while ($row=mysql_fetch_array($sql)) {
+			if ($row[0]!=$_SESSION['UserID']) {
+				$insertNotif="INSERT INTO notifications VALUES ('','".$row[0]."','0','".$pdate."','".$phour."','".$_SESSION['UserID']."','2','".$_GET['group']."')";
+				$resNotif=mysql_query($insertNotif,$dbconn);
+			}
+		}
+
+
 		if ($result) {
 			header("location: dashboard.php?group=".$_GET['group']."");
-		} else {
-			echo mysql_error();
-		}
+		} 
 
 	}
 
