@@ -127,3 +127,12 @@ function valPass(){
 	  document.getElementById("Pass2").focus();
 	}
 }
+
+$("#targetDiv").on('click','h6',function(){
+	var text = $( "#searchbar" ).val();
+	var text2=$.trim(text);
+
+	if (text2!="" && text.length>2) {
+		window.location.href = "../search/?tag="+text2+"";
+	}
+});

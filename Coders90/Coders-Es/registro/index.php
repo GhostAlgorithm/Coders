@@ -34,6 +34,10 @@
 					$insFoll="INSERT INTO following VALUES('','".$userid."','".$userid."','1','1')";
 					$result=mysql_query($insFoll);
 
+					$rdate=date("Y-m-d");
+					$insFoll="INSERT INTO userinformation VALUES('".$userid."','".$rdate."','','','','','','','')";
+					$result=mysql_query($insFoll);
+
 					mkdir("../editor/codefiles/".$userid, 0777);
 
 					if($result){

@@ -160,7 +160,7 @@
 										<a href="../dashboard/">Home</a>
 									</li>
 									<li>
-										<a href="#">Resultados para</a>
+										<a href="#">Resultados de búsqueda</a>
 									</li>
 								</ul>
 								<!-- /BREADCRUMBS -->
@@ -196,7 +196,18 @@
 <!-- Core Bootstrap-->
 <!--/PAGE -->
 <!-- JAVASCRIPTS -->
-<!-- JQUERY -->
+<script type="text/javascript">
+		$( "#searchbar" ).keyup(function(){
+		var text = $( "#searchbar" ).val();
+		var text2=$.trim(text);
+
+		if (text2!="" && text.length>2) {
+			getData('cons.php', 'targetDiv',tag());
+		} else {
+			$("#targetDiv").html("");
+		};
+	});
+</script>
 <!-- AJAX -->
 <script src="../Func.js"></script>
 <!-- BOOTSTRAP -->
