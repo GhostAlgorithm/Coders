@@ -1,0 +1,61 @@
+.foto-header {
+  height: 200px;
+  background: url("../img/header/header.jpg");
+  background-position: center center;
+   -webkit-background-size: 100%;
+    background-size: 100%;
+    border-bottom: 5px solid #f39c12;
+}
+
+.foto-perfil {
+  border: 5px solid #f39c12;
+  border-radius: 6.250em;
+  margin-top: -5em;
+  margin-left: 5em;
+}
+
+/*Informacion*/
+
+.informacion-usuario {
+	display: inline-block;
+	width: 100%;
+	height: 100px;
+	margin-top: -5.8em;
+}
+
+.nombre-usuario > h2 {
+	display: inline-block;
+	margin-left: 9em;
+	margin-right: 5em;
+}
+
+.nombre-usuario > h3 {
+	display: inline-block;
+	text-align: center;
+	margin-left: 2em;
+}
+
+.publicaciones:hover ,
+.seguidos:hover ,
+.seguidores:hover  {
+	border-bottom: 5px solid #f39c12;
+}
+
+
+/* Elementos Responsive */
+
+@media (max-width:600px) {
+	.foto-perfil {
+		margin-left: 10em;
+	}
+
+	.nombre-usuario > h2 {
+		margin-top: 3em;
+		margin-left: 4em;
+	}
+
+	.nombre-usuario > h4 {
+		margin-left: 7em;
+	
+	}
+}
