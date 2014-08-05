@@ -737,13 +737,57 @@ function searchList($tag,$start,$length){
 	while($row=mysql_fetch_array($result)){
 		echo "<a href='../profile/?user=".$row[0]."' class='styleLess'>
 				<div class='media-body chat-pop messages'>		
-					<img class='img-perfil pull-left spacer-7' alt='User image'  width='50px' height='50px' src='../img/avatars/".$row[0].".jpg'>
+					<img class='img-perfil pull-left spacer-7' alt='User image'  width='50px' height='50px' src='../img/avatars/".$row[0].".jpg' onerror=\"this.src='../img/avatars/default.jpg'\">
 					<h4 class='media-heading padding-left'>".$row[1]." ".$row[2]."<span class='pull-right'><abbr class='timeago' title=''>Miembro desde ".strftime("%B de %Y",strtotime($row[4]))."</abbr></span></h4>
 					<p class='padding-left'>".$row[3]."</p>
 				</div>
 			</a>
 			<div class='divide-20'></div>";
 	}
+	mysql_close();
+}
+
+function paginationSearch($tag,$actPage,$querySql){
+	include("../BDD.php");
+	$result=mysql_query($querySql,$dbconn);
+	$totalUsers=mysql_num_rows($result);
+	$totalPages=ceil($totalUsers / 3);
+	$next=$actPage+1;
+	$previous=$actPage-1;
+	
+	if ($totalPages==1){
+		echo "<ul class='pager'>
+			<li class='previous disabled'><a href=''>&larr; Anterior</a></li>
+			<li class='next disabled'><a href=''>Siguiente &rarr;</a></li>
+	      </ul>";
+	}
+	
+
+	if ($actPage==1 && $totalPages!=1){
+		echo "<ul class='pager'>
+			<li class='previous disabled'><a href=''>&larr; Anterior</a></li>
+			<li class='next'><a href='index.php?tag=".$tag."&page=".$next."'>Siguiente &rarr;</a></li>
+	      </ul>";
+	}
+
+	if ($actPage!=1 && $actPage!=$totalPages){
+		echo "<ul class='pager'>
+			<li class='previous'><a href=index.php?tag=".$tag."&page='".$previous."'>&larr; Anterior</a></li>
+			<li class='next'><a href='index.php?tag=".$tag."&page=".$next."'>Siguiente &rarr;</a></li>
+	      </ul>";
+	}
+
+	if ($actPage==$totalPages && $actPage!=1){
+		echo "<ul class='pager'>
+			<li class='previous'><a href='index.php?tag=".$tag."&page=".$previous."'>&larr; Anterior</a></li>
+			<li class='next disabled'><a href=''>Siguiente &rarr;</a></li>
+	      </ul>";
+	}
+
+	echo "<div class='col-xs-12 col-md-12'>
+			<center><h5>Página ".$actPage." de"." ".$totalPages."</h5><h6>(Se muestran 3 registros por página)</h6></center>
+		  </div>";
+
 	mysql_close();
 }
 ?>

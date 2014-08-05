@@ -166,7 +166,7 @@
 								<!-- /BREADCRUMBS -->
 								<div class="clearfix">
 									<h3 class="content-title pull-left">
-										Resultados de la búsqueda
+										Resultados
 									</h3>
 								</div>
 								<div class="description">Mostrando resultados  para "<?php echo $_GET['tag']?>"</div>
@@ -182,6 +182,9 @@
 								searchList($_GET['tag'],$start,$length);
 							?>	
 							<div class='divide-20'></div>
+							<?php 
+								paginationSearch($_GET['tag'],$page,"SELECT users.UserID, users.Name, users.LastName, userinformation.Description, userinformation.RegistryDate FROM users INNER JOIN userinformation ON users.UserID = userinformation.UserID WHERE users.Name LIKE '".$_GET['tag']."%' OR users.LastName LIKE '".trim($_GET['tag'])."%' OR users.Email LIKE '".trim($_GET['tag'])."%'");
+							?>
 						</div>
 					</div>
 					<!-- /Contenido general --> 
