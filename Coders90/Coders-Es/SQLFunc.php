@@ -674,13 +674,6 @@ function groupList($u,$start,$length){
 	$result=mysql_query($query,$dbconn);
 
 	while($row=mysql_fetch_array($result)){
-		/*echo "<tr>
-			<td class='table-rows'><input type='checkbox' name='groupIdf[]' value='".$row[3]."'></td>
-			<td class='table-rows'>".$row[0]."</td>
-			<td class='table-rows'>".$row[1]."</td>
-			<td class='table-rows'>".$row[2]."</td>
-			<td class='actions'><a href='groupsActions.php?groupIdf=".$row[0]."'><i class='fa fa-wrench'></i></a></td>
-		</tr>";*/
 		echo "<tr>
 			<td class='table-rows'>".$row[0]."</td>
 			<td class='table-rows'>".$row[1]."</td>
@@ -731,6 +724,26 @@ function paginationGroups($idf,$actPage,$querySql){
 			<center><h5>Página ".$actPage." de"." ".$totalPages."</h5><h6>(Se muestran 3 registros por página)</h6></center>
 		  </div>";
 
+	mysql_close();
+}
+
+function searchList($tag,$start,$length){
+	include("../BDD.php");
+	$post="SELECT users.UserID, users.Name, users.LastName, userinformation.Description, userinformation.RegistryDate FROM users INNER JOIN userinformation ON users.UserID = userinformation.UserID WHERE users.Name LIKE '".$tag."%' OR users.LastName LIKE '".trim($tag)."%' OR users.Email LIKE '".trim($tag)."%' LIMIT ".$start.",".$length."";
+	$result=mysql_query($post,$dbconn);
+	$totalUsers=mysql_num_rows($result);
+	$totalPages=ceil($totalUsers / 3);
+	
+	while($row=mysql_fetch_array($result)){
+		echo "<a href='../profile/?user=".$row[0]."' class='styleLess'>
+				<div class='media-body chat-pop messages'>		
+					<img class='img-perfil pull-left spacer-7' alt='User image'  width='50px' height='50px' src='../img/avatars/".$row[0].".jpg'>
+					<h4 class='media-heading padding-left'>".$row[1]." ".$row[2]."<span class='pull-right'><abbr class='timeago' title=''>Miembro desde ".strftime("%B de %Y",strtotime($row[4]))."</abbr></span></h4>
+					<p class='padding-left'>".$row[3]."</p>
+				</div>
+			</a>
+			<div class='divide-20'></div>";
+	}
 	mysql_close();
 }
 ?>

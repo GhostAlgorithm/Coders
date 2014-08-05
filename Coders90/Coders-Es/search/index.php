@@ -1,7 +1,7 @@
 <?php
 	session_save_path("../sessions/");
 	session_start();
-	//error_reporting(0);
+	error_reporting(0);
 	if(!isset($_SESSION['UserID'])){
 		header('Location: ../');
 	}
@@ -11,6 +11,18 @@
 		$res=true;
 	} else {
 		header('Location: ../dashboard/');
+	}
+
+	$length = 3;
+
+	$page = $_GET["page"]; 
+	
+	if (!$page) { 
+		 $start = 0; 
+		 $page=1;
+	} 
+	else { 
+		$start = ($page - 1) * $length;
 	}
 ?>	
 <!DOCTYPE html>
@@ -157,7 +169,7 @@
 										Resultados de la búsqueda
 									</h3>
 								</div>
-								<div class="description">Mostrando resultados  para ""</div>
+								<div class="description">Mostrando resultados  para "<?php echo $_GET['tag']?>"</div>
 							</div>
 						</div>
 					</div>
@@ -165,7 +177,11 @@
 					<!-- Contenido general -->
 					<div class="row">
 						<div class="col-xs-12 col-md-12 pull-right">
-							
+							<?php 
+								include("../SQLFunc.php");
+								searchList($_GET['tag'],$start,$length);
+							?>	
+							<div class='divide-20'></div>
 						</div>
 					</div>
 					<!-- /Contenido general --> 
