@@ -1,3 +1,19 @@
+<!--                Copyright (c) 2014 
+José Fernando Flores Santamaría <fer.santamaria@programmer.net>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+-->
 <?php
 	session_save_path("../sessions/");
 	session_start();
@@ -5,26 +21,7 @@
 	if(!isset($_SESSION['UserID'])){
 		header('Location: ../');
 	}
-/*
-
-	if (isset($_GET['tag']) && !empty($_GET['tag'])) {
-		$res=true;
-	} else {
-		header('Location: ../dashboard/');
-	}
-
-	$length = 3;
-
-	$page = $_GET["page"]; 
 	
-	if (!$page) { 
-		 $start = 0; 
-		 $page=1;
-	} 
-	else { 
-		$start = ($page - 1) * $length;
-	}
-*/
 	require("../SQLFunc.php");
 ?>	
 <!DOCTYPE html>
