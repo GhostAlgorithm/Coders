@@ -1,11 +1,11 @@
 <?php
 	session_save_path("../sessions/");
 	session_start();
-	//error_reporting(0);
+	error_reporting(0);
 	if(!isset($_SESSION['UserID'])){
 		header('Location: ../');
 	}
-
+/*
 
 	if (isset($_GET['tag']) && !empty($_GET['tag'])) {
 		$res=true;
@@ -24,7 +24,7 @@
 	else { 
 		$start = ($page - 1) * $length;
 	}
-
+*/
 	require("../SQLFunc.php");
 ?>	
 <!DOCTYPE html>
@@ -181,16 +181,15 @@
 										<a href="../dashboard/">Home</a>
 									</li>
 									<li>
-										<a href="#">Resultados de búsqueda</a>
+										<a href="#">Notificaciones</a>
 									</li>
 								</ul>
 								<!-- /BREADCRUMBS -->
 								<div class="clearfix">
 									<h3 class="content-title pull-left">
-										Resultados
+										Notificaciones
 									</h3>
 								</div>
-								<div class="description">Mostrando resultados  para "<?php echo $_GET['tag']?>"</div>
 							</div>
 						</div>
 					</div>
@@ -198,11 +197,22 @@
 					<!-- Contenido general -->
 					<div class="row">
 						<div class="col-xs-12 col-md-12 pull-right">
+							<div class="box">
+						    	<div class="box-title small">
+									<h4><i class="fa fa-bell"></i>notificaciones sin revisar</h4>
+								</div>
+							</div>
 							<?php 
-								unreadNotifications();
-							?>	
-							<div class='divide-20'></div>
-							
+								notifications("0");
+							?>
+							<div class="box">
+						    	<div class="box-title small">
+									<h4><i class="fa fa-bell"></i>Notificaciones antiguas</h4>
+								</div>
+							</div>
+							<?php 
+								notifications("10");
+							?>
 						</div>
 					</div>
 					<!-- /Contenido general --> 

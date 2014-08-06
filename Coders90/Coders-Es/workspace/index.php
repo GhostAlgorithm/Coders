@@ -107,7 +107,7 @@
 					notifList();
 					?>
 					<li class="footer">
-						<a href="#">Todas las notificaciones <i class="fa fa-arrow-circle-right"></i></a>
+						<a href="../notifications/">Todas las notificaciones <i class="fa fa-arrow-circle-right"></i></a>
 					</li>
 				</ul>
 			</li>

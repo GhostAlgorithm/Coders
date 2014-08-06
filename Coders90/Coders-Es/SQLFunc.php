@@ -738,7 +738,7 @@ function searchList($tag,$start,$length){
 		echo "<a href='../profile/?user=".$row[0]."' class='styleLess'>
 				<div class='media-body chat-pop messages'>		
 					<img class='img-perfil pull-left spacer-7' alt='User image'  width='50px' height='50px' src='../img/avatars/".$row[0].".jpg' onerror=\"this.src='../img/avatars/default.jpg'\">
-					<h4 class='media-heading padding-left'>".$row[1]." ".$row[2]."<span class='pull-right'><abbr class='timeago' title=''>Miembro desde ".strftime("%B de %Y",strtotime($row[4]))."</abbr></span></h4>
+					<h4 class='media-heading padding-left'>".$row[1]." ".$row[2]."<span class='pull-right'><abbr class='timeago hidden-xs' title=''>Miembro desde ".strftime("%B de %Y",strtotime($row[4]))."</abbr></span></h4>
 					<p class='padding-left'>".$row[3]."</p>
 				</div>
 			</a>
@@ -794,7 +794,9 @@ function paginationSearch($tag,$actPage,$querySql){
 function notifList(){
 	include("../BDD.php");
 
-	$query="SELECT notifications.*, users.Name, users.LastName FROM notifications INNER JOIN users ON users.UserID=notifications.User WHERE notifications.UserID='".$_SESSION['UserID']."' AND View='0' ORDER BY Date DESC, TIME DESC";
+	$query="(SELECT notifications.*, users.Name, users.LastName FROM notifications INNER JOIN users ON users.UserID=notifications.User WHERE notifications.UserID='".$_SESSION['UserID']."' AND View='0' ORDER BY Date DESC, TIME DESC)
+	UNION
+	(SELECT notifications.*, users.Name, users.LastName FROM notifications INNER JOIN users ON users.UserID=notifications.User WHERE notifications.UserID='".$_SESSION['UserID']."' AND View='1' ORDER BY Date DESC, TIME DESC) LIMIT 6";
 	$result=mysql_query($query,$dbconn);
 
 	while ($row=mysql_fetch_array($result)) {
@@ -908,6 +910,118 @@ function groupName($idf){
 	}
 
 	return $name;
+}
+
+function notifications($view){
+	include("../BDD.php");
+	$post="SELECT notifications.*, users.Name, users.LastName FROM notifications INNER JOIN users ON users.UserID=notifications.User WHERE notifications.UserID='".$_SESSION['UserID']."' AND View='".$view."' ORDER BY Date DESC, TIME DESC";
+	$result=mysql_query($post,$dbconn);
+	$totalUsers=mysql_num_rows($result);
+	$totalPages=ceil($totalUsers / 3);
+
+	while ($row=mysql_fetch_array($result)) {
+		$type=$row[6];
+		switch ($type) {
+			case '1':
+				echo "<li>
+						<a href='#' idf='".$row[0]."' class='notifier styleLess'>
+							<div class='media-body chat-pop messages'>		
+								<img class='img-perfil pull-left spacer-7' alt='User image'  width='50px' height='50px' src='../img/avatars/".$row[5].".jpg' onerror=\"this.src='../img/avatars/default.jpg'\">
+								<h4 class='media-heading padding-left'>".$row[8]." ".$row[9]."<span class='pull-right'><abbr class='timeago hidden-xs' title=''>".strftime("%d de %B",strtotime($row[3])) .", ".date("g:i a", strtotime($row[4]))."</abbr></span></h4>
+								<p class='padding-left'>Ha comentado tu publicacion </p>
+							</div>
+						</a>
+					</li>
+					<div class='divide-20'></div>";
+				break;
+			
+			case '2':
+				echo "<li>
+						<a href='../groups/dashboard.php?group=".$row[7]."' idf='".$row[0]."' class='notifier styleLess'>
+							<div class='media-body chat-pop messages'>		
+								<img class='img-perfil pull-left spacer-7' alt='User image'  width='50px' height='50px' src='../img/avatars/".$row[5].".jpg' onerror=\"this.src='../img/avatars/default.jpg'\">
+								<h4 class='media-heading padding-left'>".$row[8]." ".$row[9]."<span class='pull-right'><abbr class='timeago hidden-xs' title=''>".strftime("%d de %B",strtotime($row[3])) .", ".date("g:i a", strtotime($row[4]))."</abbr></span></h4>
+								<p class='padding-left'>ha publicado en ".groupName($row[7])."</p>
+							</div>
+						</a>
+					</li>
+					<div class='divide-20'></div>";
+				break;
+
+			case '3':
+				$sql="SELECT GroupID FROM post_group WHERE PostID='".$row[7]."' LIMIT 1";
+				$resSql=mysql_query($sql,$dbconn);
+				while ($rowSQL=mysql_fetch_array($resSql)) {
+					$gID=$rowSQL[0];
+				}
+				echo "<li>
+						<a href='#' idf='".$row[0]."' class='notifier styleLess'>
+							<div class='media-body chat-pop messages'>		
+								<img class='img-perfil pull-left spacer-7' alt='User image'  width='50px' height='50px' src='../img/avatars/".$row[5].".jpg' onerror=\"this.src='../img/avatars/default.jpg'\">
+								<h4 class='media-heading padding-left'>".$row[8]." ".$row[9]."<span class='pull-right'><abbr class='timeago hidden-xs' title=''>".strftime("%d de %B",strtotime($row[3])) .", ".date("g:i a", strtotime($row[4]))."</abbr></span></h4>
+								<p class='padding-left'>Ha comentado tu publicación en ".groupName($gID)."</p>
+							</div>
+						</a>
+					</li>
+					<div class='divide-20'></div>";
+				break;
+
+			case '4':
+				echo "<li>
+						<a href='../groups/workspace.php?group=".$row[7]."' idf='".$row[0]."' class='notifier styleLess'>
+							<div class='media-body chat-pop messages'>		
+								<img class='img-perfil pull-left spacer-7' alt='User image'  width='50px' height='50px' src='../img/avatars/".$row[5].".jpg' onerror=\"this.src='../img/avatars/default.jpg'\">
+								<h4 class='media-heading padding-left'>".$row[8]." ".$row[9]."<span class='pull-right'><abbr class='timeago hidden-xs' title=''>".strftime("%d de %B",strtotime($row[3])) .", ".date("g:i a", strtotime($row[4]))."</abbr></span></h4>
+								<p class='padding-left'>Ha subido un archivo en ".groupName($row[7])."</p>
+							</div>
+						</a>
+					</li>
+					<div class='divide-20'></div>";
+				break;
+			
+			case '5':
+				$total=explode("-", $row[7]);
+
+				if ($total[1]=='1') {
+					echo "<li>
+						<a href='../groups/members.php?group=".$total[0]."' idf='".$row[0]."' class='notifier styleLess'>
+							<div class='media-body chat-pop messages'>		
+								<img class='img-perfil pull-left spacer-7' alt='User image'  width='50px' height='50px' src='../img/avatars/".$row[5].".jpg' onerror=\"this.src='../img/avatars/default.jpg'\">
+								<h4 class='media-heading padding-left'>".$row[8]." ".$row[9]."<span class='pull-right'><abbr class='timeago hidden-xs' title=''>".strftime("%d de %B",strtotime($row[3])) .", ".date("g:i a", strtotime($row[4]))."</abbr></span></h4>
+								<p class='padding-left'>Agregó ".$total[1]." miembro en ".groupName($total[0])."</p>
+							</div>
+						</a>
+					</li>
+					<div class='divide-20'></div>";
+				} else {
+					echo "<li>
+						<a href='../groups/members.php?group=".$total[0]."' idf='".$row[0]."' class='notifier styleLess'>
+							<div class='media-body chat-pop messages'>		
+								<img class='img-perfil pull-left spacer-7' alt='User image'  width='50px' height='50px' src='../img/avatars/".$row[5].".jpg' onerror=\"this.src='../img/avatars/default.jpg'\">
+								<h4 class='media-heading padding-left'>".$row[8]." ".$row[9]."<span class='pull-right'><abbr class='timeago hidden-xs' title=''>".strftime("%d de %B",strtotime($row[3])) .", ".date("g:i a", strtotime($row[4]))."</abbr></span></h4>
+								<p class='padding-left'>Agregó ".$total[1]." miembros en ".groupName($total[0])."</p>
+							</div>
+						</a>
+					</li>
+					<div class='divide-20'></div>";
+				}
+				
+				break;
+				
+			case '6':
+				echo "<li>
+						<a href='../profile/?user=".$row[7]."' idf='".$row[0]."' class='notifier styleLess'>
+							<div class='media-body chat-pop messages'>		
+								<img class='img-perfil pull-left spacer-7' alt='User image'  width='50px' height='50px' src='../img/avatars/".$row[5].".jpg' onerror=\"this.src='../img/avatars/default.jpg'\">
+								<h4 class='media-heading padding-left'>".$row[8]." ".$row[9]."<span class='pull-right'><abbr class='timeago hidden-xs' title=''>".strftime("%d de %B",strtotime($row[3])) .", ".date("g:i a", strtotime($row[4]))."</abbr></span></h4>
+								<p class='padding-left'>Ahora te sigue</p>
+							</div>
+						</a>
+					</li>
+					<div class='divide-20'></div>";
+				break;		
+		}
+	}
 }
 ?>
 
