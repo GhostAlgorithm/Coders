@@ -1,7 +1,7 @@
 <?php
 	session_save_path("../sessions/");
 	session_start();
-	//error_reporting(0);
+	error_reporting(0);
 	if(!isset($_SESSION['UserID'])){
 		header('Location: ../');
 	}
