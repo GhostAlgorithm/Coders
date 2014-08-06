@@ -1,28 +1,9 @@
 <?php
 	session_save_path("../sessions/");
 	session_start();
-	error_reporting(0);
+	//error_reporting(0);
 	if(!isset($_SESSION['UserID'])){
 		header('Location: ../');
-	}
-
-
-	if (isset($_GET['tag']) && !empty($_GET['tag'])) {
-		$res=true;
-	} else {
-		header('Location: ../dashboard/');
-	}
-
-	$length = 3;
-
-	$page = $_GET["page"]; 
-	
-	if (!$page) { 
-		 $start = 0; 
-		 $page=1;
-	} 
-	else { 
-		$start = ($page - 1) * $length;
 	}
 
 	require("../SQLFunc.php");
@@ -170,37 +151,10 @@
 		<div class="container pull-left">
 			<div class="row">
 				<div id="content" class="col-lg-12">
-					<!-- Header de contenido-->
-					<div class="row">
-						<div class="col-sm-12">
-							<div class="page-header">
-								<!-- BREADCRUMBS -->
-								<ul class="breadcrumb">
-									<li>
-										<i class="fa fa-home"></i>
-										<a href="../dashboard/">Home</a>
-									</li>
-									<li>
-										<a href="#">Resultados de búsqueda</a>
-									</li>
-								</ul>
-								<!-- /BREADCRUMBS -->
-								<div class="clearfix">
-									<h3 class="content-title pull-left">
-										Resultados
-									</h3>
-								</div>
-								<div class="description">Mostrando resultados  para "<?php echo $_GET['tag']?>"</div>
-							</div>
-						</div>
-					</div>
-					<!-- /Header de contenido -->
 					<!-- Contenido general -->
 					<div class="row">
 						<div class="col-xs-12 col-md-12 pull-right">
-							<?php 
-								searchList($_GET['tag'],$start,$length)
-							?>	
+							
 							<div class='divide-20'></div>
 							
 						</div>
