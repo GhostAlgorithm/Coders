@@ -794,9 +794,9 @@ function paginationSearch($tag,$actPage,$querySql){
 function notifList(){
 	include("../BDD.php");
 
-	$query="(SELECT notifications.*, users.Name, users.LastName FROM notifications INNER JOIN users ON users.UserID=notifications.User WHERE notifications.UserID='".$_SESSION['UserID']."' AND View='0' ORDER BY Date DESC, TIME DESC)
+	$query="SELECT * FROM ((SELECT stream_notification_callback(notification_code, severity, message, message_code, bytes_transferred, bytes_max)tions.*, users.Name, users.LastName FROM notifications INNER JOIN users ON users.UserID=notifications.User WHERE notifications.UserID='".$_SESSION['UserID']."' AND View='0')
 	UNION
-	(SELECT notifications.*, users.Name, users.LastName FROM notifications INNER JOIN users ON users.UserID=notifications.User WHERE notifications.UserID='".$_SESSION['UserID']."' AND View='1' ORDER BY Date DESC, TIME DESC) LIMIT 6";
+	(SELECT notifications.*, users.Name, users.LastName FROM notifications INNER JOIN users ON users.UserID=notifications.User WHERE notifications.UserID='".$_SESSION['UserID']."' AND View='1'))subTbl ORDER BY subTbl.Date DESC, subTbl.TIME DESC LIMIT 6";
 	$result=mysql_query($query,$dbconn);
 
 	while ($row=mysql_fetch_array($result)) {
@@ -916,8 +916,11 @@ function notifications($view){
 	include("../BDD.php");
 	$post="SELECT notifications.*, users.Name, users.LastName FROM notifications INNER JOIN users ON users.UserID=notifications.User WHERE notifications.UserID='".$_SESSION['UserID']."' AND View='".$view."' ORDER BY Date DESC, TIME DESC";
 	$result=mysql_query($post,$dbconn);
-	$totalUsers=mysql_num_rows($result);
-	$totalPages=ceil($totalUsers / 3);
+	$totalNotif=mysql_num_rows($result);
+
+	if ($totalNotif=="0") {
+		echo"<center><h4>No hay notificaciones pendientes</h4></center><div class='divide-15'></div>";
+	}
 
 	while ($row=mysql_fetch_array($result)) {
 		$type=$row[6];

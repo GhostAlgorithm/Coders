@@ -1,7 +1,7 @@
 <?php
 	session_save_path("../sessions/");
 	session_start();
-	error_reporting(0);
+	//error_reporting(0);
 	if(!isset($_SESSION['UserID'])){
 		header('Location: ../');
 	}
@@ -199,7 +199,7 @@
 						<div class="col-xs-12 col-md-12 pull-right">
 							<div class="box">
 						    	<div class="box-title small">
-									<h4><i class="fa fa-bell"></i>notificaciones sin revisar</h4>
+									<h4><i class="fa fa-bell"></i>Notificaciones sin revisar</h4>
 								</div>
 							</div>
 							<?php 
@@ -211,7 +211,7 @@
 								</div>
 							</div>
 							<?php 
-								notifications("10");
+								notifications("1");
 							?>
 						</div>
 					</div>
