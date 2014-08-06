@@ -337,11 +337,6 @@
 			$("#targetDiv").html("");
 		};
 	});
-
-	$("#add").click(function(){
-		$("#notifications").append("<li><a href='#'><span class='label label-info'><i class='fa fa-edit'></i></span><span class='body'><span class='message'>Ha creado una publicación. </span></span></a></li>");
-	});
-
 </script>
 <!-- JQUERY -->
 <!-- AJAX -->

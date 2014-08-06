@@ -9,7 +9,7 @@
 
 	include("../BDD.php");
 
-	if((isset($_GET['r']) && !empty($_GET['r']))){
+	if((isset($_GET['r']) && !empty($_GET['r'])) && (isset($_GET['i']) && !empty($_GET['i']))){
 
 		if ($_GET['r']=='post') {
 			$comment="";
@@ -156,6 +156,153 @@
 						</span>
 					</div>
 				</div>";			
+
+		} elseif ($_GET['r']=='group') {
+			$comment="";
+			$query="SELECT post_group.*, users.Name, users.Lastname FROM post_group INNER JOIN users on users.UserID=post_group.UserID WHERE post_group.PostID='".$_GET['i']."' AND View='1' LIMIT 1";
+			$result=mysql_query($query,$dbconn);
+			$valid=mysql_num_rows($result);
+
+			if ($valid=='0') {
+				header('Location: ../error/404.html');
+			}
+
+			while ($row=mysql_fetch_array($result)) {
+				if ($row[1]==$_SESSION['UserID']) {
+					$content= "
+					<div class='box border green' style='z-index:1; position:relative;'>
+				    	<div class='box-title small'>
+							<h4><i class='fa fa-code'></i><a idf='".$row[0]."'  style='text-decoration: none; color:white; cursor:pointer;' class='profile'>".$row[7]." ".$row[8]."</a></h4>
+							<div class='pull-right'>
+								<span class='timeclass pull-right'>
+									<i class='fa fa-clock-o'></i>
+									<span>".strftime("%d de %B",strtotime($row[4])) .", ".date("g:i a", strtotime($row[5]))."</span>
+									<span>&nbsp;&nbsp;<span class='compose tip-left' title='Eliminar publicación'><i class='fa fa-times-circle delete-comment timeclass' title='Eliminar publicacion' idf='".$row[0]."' post-idf='".$row[7]."' onClick='delPost(this)'></i></span></span>
+								</span>
+							</div>
+						</div>	
+						<div class='box-body clearfix' style='word-wrap:break-word;'>
+							<span>
+								<div class='col-xs-2 col-md-1'> 
+									<img class='img-perfil' src='../img/avatars/".$row[1].".jpg' onerror=\"this.src='../img/avatars/default.jpg'\" width='50' height='50'>
+								</div>
+								<div class='col-xs-8 col-md-10'>
+									<div class='col-xs-12 col-md-12' style='word-wrap:break-word;'>
+										<h5>
+											<span>".htmlentities($row[3],ENT_NOQUOTES,"UTF-8")."</span>
+										</h5>
+									</div>
+								</div>
+							</span>
+						</div>	
+					</div>";
+				} else {
+					$content="
+					<div class='box border green' style='z-index:1; position:relative;'>
+				    	<div class='box-title small'>
+							<h4><i class='fa fa-code'></i>".$row[7]." ".$row[8]."</h4>
+							<div class='pull-right'>
+								<span class='timeclass pull-right'>
+									<i class='fa fa-clock-o'></i>
+									<span>".strftime("%d de %B",strtotime($row[4])) .", ".date("g:i a", strtotime($row[5]))."</span>
+								</span>
+							</div>
+						</div>	
+						<div class='box-body clearfix' style='word-wrap:break-word;'>
+							<span>
+								<div class='col-xs-2 col-md-1'> 
+									<img class='img-perfil' src='../img/avatars/".$row[1].".jpg' onerror=\"this.src='../img/avatars/default.jpg'\" width='50' height='50'>
+								</div>
+								<div class='col-xs-8 col-md-10'>
+									<div class='col-xs-12 col-md-12' style='word-wrap:break-word;'>
+										<h5>
+											<span>".htmlentities($row[3],ENT_NOQUOTES,"UTF-8")."</span>
+										</h5>
+									</div>
+								</div>
+							</span>
+						</div>	
+					</div>";
+				}
+					
+			}
+
+			$query="SELECT postcomments_group.*, users.Name, users.Lastname FROM postcomments_group INNER JOIN users on users.UserID=postcomments_group.UserID WHERE postcomments_group.PostID='".$_GET['i']."' AND View='1' ORDER BY Date ASC, Time ASC";
+			$result=mysql_query($query,$dbconn);
+
+			$comment.="<div class='comment pull-right' style='border: solid 1px #cbcbcb; position: relative; width:95%; border-radius: 5px; margin-top: -25px;'>
+						<div class='divide-20'></div>";
+
+			while($row = mysql_fetch_array($result)){
+				$postIDF=$row[6];
+				$resPost=substr($postIDF, 0,20)	;
+
+				if ($_SESSION['UserID']==$resPost) {
+					$comment.="<div class='box-body clearfix adjust-text' style='word-wrap:break-word;'>
+								<span>
+									<div class='adjust-img'>
+										<img class='img-perfil' src='../img/avatars/".$row[1].".jpg' onerror=\"this.src='../img/avatars/default.jpg'\" width='50' height='50'>
+									</div>
+									<div class='col-xs-12 col-md-12'>
+										<div class='col-xs-12 col-md-12' style='word-wrap:break-word;'>
+											<pre><a style='text-decoration: none;' href='../profile/index.php?user=".$row[1]."'><h5 class='comment-name' >"."  ".$row[7]." ".$row[8]."</a></h5><span class='pull-right comment-time'><i class='fa fa-clock-o'></i> ".strftime("%d de %B",strtotime($row[4])) .", ".date("g:i a", strtotime($row[5]))." "."<i class='fa fa-times-circle delete-comment' title='Eliminar comentario' idf='".$row[0]."' post-idf='".$row[6]."' onClick='delComment(this)'></i></span>".htmlentities($row[2],ENT_NOQUOTES,"UTF-8")."</pre>
+										</div>
+									</div>
+								</span>
+							</div>
+							<div class='divide-15'></div>";
+				} else {
+					if ($_SESSION['UserID']==$row[1]) {
+						$comment.="<div class='box-body clearfix adjust-text' style='word-wrap:break-word;'>
+								<span>
+									<div class='adjust-img'>
+										<img class='img-perfil' src='../img/avatars/".$row[1].".jpg' onerror=\"this.src='../img/avatars/default.jpg'\" width='50' height='50'>
+									</div>
+									<div class='col-xs-12 col-md-12'>
+										<div class='col-xs-12 col-md-12' style='word-wrap:break-word;'>
+											<pre><a style='text-decoration: none;' href='../profile/index.php?user=".$row[1]."'><h5 class='comment-name' >"."  ".$row[7]." ".$row[8]."</a></h5><span class='pull-right comment-time'><i class='fa fa-clock-o'></i> ".strftime("%d de %B",strtotime($row[4])) .", ".date("g:i a", strtotime($row[5]))." "."<i class='fa fa-times-circle delete-comment' title='Eliminar comentario' idf='".$row[0]."' post-idf='".$row[6]."' onClick='delComment(this)'></i></span>".htmlentities($row[2],ENT_NOQUOTES,"UTF-8")."</pre>
+										</div>
+									</div>
+								</span>
+							</div>
+							<div class='divide-15'></div>";
+					} else {
+						$comment.="<div class='box-body clearfix adjust-text' style='word-wrap:break-word;'>
+								<span>
+									<div class='adjust-img'>
+										<img class='img-perfil' src='../img/avatars/".$row[1].".jpg' onerror=\"this.src='../img/avatars/default.jpg'\" width='50' height='50'>
+									</div>
+									<div class='col-xs-12 col-md-12'>
+										<div class='col-xs-12 col-md-12' style='word-wrap:break-word;'>
+											<pre><a style='text-decoration: none;' href='../profile/index.php?user=".$row[1]."'><h5 class='comment-name' >"."  ".$row[7]." ".$row[8]."</a></h5><span class='pull-right comment-time'><i class='fa fa-clock-o'></i> ".strftime("%d de %B",strtotime($row[4])) .", ".date("g:i a", strtotime($row[5]))."</span>".htmlentities($row[2],ENT_NOQUOTES,"UTF-8")."</pre>
+										</div>
+									</div>
+								</span>
+							</div>
+							<div class='divide-15'></div>";
+					}
+				}
+			}
+			$comment.="<div class='box-body clearfix adjust-text' style='word-wrap:break-word;'>
+						<span>
+							<div class='adjust-img'>
+								<img class='img-perfil' src='../img/avatars/".$_SESSION['UserID'].".jpg' onerror=\"this.src='../img/avatars/default.jpg'\" width='50' height='50'>
+							</div>
+							<div class='col-xs-10 col-md-11'>
+								<div class='col-xs-12 col-md-12'>
+									<textarea style='padding: 1em;' class='comment-area ".$_GET['i']."' placeholder='Escribe un comentario...'></textarea>
+									<div class='divide-10'></div>
+								</div>
+							</div>
+							<div class='col-xs-1 col-md-1'>
+								<div class='col-xs-12 col-md-12'>
+									<button class='btn btn-primary comment-btn' idf='".$_GET['i']."' style='margin-left:-4.2em; margin-top:0em; height:3.7em;' onClick='postComment(this)' onKeyDown='enterPress(this)'>Post</button>
+								</div>
+							</div>
+						</span>
+					</div>
+				</div>";			
+			
 		} else{
 			header('Location: ../error/404.html');
 		}

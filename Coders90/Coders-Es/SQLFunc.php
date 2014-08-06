@@ -49,12 +49,12 @@ function NewsFeed(){
 							</div>
 						</div>
 						<div class='col-xs-2 col-md-1'> 
-							<a><h3 class='pull-right'><span class='compose tip-left' title='Comentarios'><i class='fa fa-comments' idf='".$row[7]."''></i></span></h3></a>
+							<a><h3 class='pull-right'><span class='compose tip-left' title='Comentarios'><i class='fa fa-comments' idf='".$row[0]."''></i></span></h3></a>
 						</div>
 					</span>
 				</div>	
 			</div>
-			<div class='comments pull-right' id='".$row[7]."'>
+			<div class='comments pull-right' id='".$row[0]."'>
 			</diV>
 			<div class='divide-25'></div>";
 		} else {
@@ -82,12 +82,12 @@ function NewsFeed(){
 							</div>
 						</div>
 						<div class='col-xs-2 col-md-1'> 
-							<a><h3 class='pull-right'><span class='compose tip-left' title='Comentarios'><i class='fa fa-comments' idf='".$row[7]."''></i></span></h3></a>
+							<a><h3 class='pull-right'><span class='compose tip-left' title='Comentarios'><i class='fa fa-comments' idf='".$row[0]."''></i></span></h3></a>
 						</div>
 					</span>
 				</div>	
 			</div>
-			<div class='comments pull-right' id='".$row[7]."'>
+			<div class='comments pull-right' id='".$row[0]."'>
 			</diV>
 			<div class='divide-25'></div>";
 		}
@@ -794,7 +794,7 @@ function paginationSearch($tag,$actPage,$querySql){
 function notifList(){
 	include("../BDD.php");
 
-	$query="SELECT * FROM ((SELECT stream_notification_callback(notification_code, severity, message, message_code, bytes_transferred, bytes_max)tions.*, users.Name, users.LastName FROM notifications INNER JOIN users ON users.UserID=notifications.User WHERE notifications.UserID='".$_SESSION['UserID']."' AND View='0')
+	$query="SELECT * FROM ((SELECT notifications.*, users.Name, users.LastName FROM notifications INNER JOIN users ON users.UserID=notifications.User WHERE notifications.UserID='".$_SESSION['UserID']."' AND View='0')
 	UNION
 	(SELECT notifications.*, users.Name, users.LastName FROM notifications INNER JOIN users ON users.UserID=notifications.User WHERE notifications.UserID='".$_SESSION['UserID']."' AND View='1'))subTbl ORDER BY subTbl.Date DESC, subTbl.TIME DESC LIMIT 6";
 	$result=mysql_query($query,$dbconn);
@@ -804,7 +804,7 @@ function notifList(){
 		switch ($type) {
 			case '1':
 				echo "<li>
-						<a href='#' idf='".$row[0]."' class='notifier'>
+						<a href='../content/?r=post&i=".$row[7]."' idf='".$row[0]."' class='notifier'>
 							<span class='label-notif' style='color: #a696ce'><i class='fa fa-comment'></i></span>
 							<span class='body'>
 								<span class='message'>".$row[8]." ".$row[9]." ha comentado tu publicacion </span>
@@ -831,7 +831,7 @@ function notifList(){
 					$gID=$rowSQL[0];
 				}
 				echo "<li>
-						<a href='#' idf='".$row[0]."' class='notifier'>
+						<a href='../groups/dashboard.php?group=".$gID."' idf='".$row[0]."' class='notifier'>
 							<span class='label-notif' style='color: #f0ad4e'><i class='fa fa-comments'></i></span>
 							<span class='body'>
 								<span class='message'>".$row[8]." ".$row[9]." ha comentado tu publicación en ".groupName($gID)."</span>
@@ -927,7 +927,7 @@ function notifications($view){
 		switch ($type) {
 			case '1':
 				echo "<li>
-						<a href='#' idf='".$row[0]."' class='notifier styleLess'>
+						<a href='../content/?r=post&i=".$row[7]."' idf='".$row[0]."' class='notifier styleLess'>
 							<div class='media-body chat-pop messages'>		
 								<img class='img-perfil pull-left spacer-7' alt='User image'  width='50px' height='50px' src='../img/avatars/".$row[5].".jpg' onerror=\"this.src='../img/avatars/default.jpg'\">
 								<h4 class='media-heading padding-left'>".$row[8]." ".$row[9]."<span class='pull-right'><abbr class='timeago hidden-xs' title=''>".strftime("%d de %B",strtotime($row[3])) .", ".date("g:i a", strtotime($row[4]))."</abbr></span></h4>
@@ -944,7 +944,7 @@ function notifications($view){
 							<div class='media-body chat-pop messages'>		
 								<img class='img-perfil pull-left spacer-7' alt='User image'  width='50px' height='50px' src='../img/avatars/".$row[5].".jpg' onerror=\"this.src='../img/avatars/default.jpg'\">
 								<h4 class='media-heading padding-left'>".$row[8]." ".$row[9]."<span class='pull-right'><abbr class='timeago hidden-xs' title=''>".strftime("%d de %B",strtotime($row[3])) .", ".date("g:i a", strtotime($row[4]))."</abbr></span></h4>
-								<p class='padding-left'>ha publicado en ".groupName($row[7])."</p>
+								<p class='padding-left'>Ha publicado en ".groupName($row[7])."</p>
 							</div>
 						</a>
 					</li>
@@ -958,7 +958,7 @@ function notifications($view){
 					$gID=$rowSQL[0];
 				}
 				echo "<li>
-						<a href='#' idf='".$row[0]."' class='notifier styleLess'>
+						<a href='../groups/dashboard.php?group=".$gID."' idf='".$row[0]."' class='notifier styleLess'>
 							<div class='media-body chat-pop messages'>		
 								<img class='img-perfil pull-left spacer-7' alt='User image'  width='50px' height='50px' src='../img/avatars/".$row[5].".jpg' onerror=\"this.src='../img/avatars/default.jpg'\">
 								<h4 class='media-heading padding-left'>".$row[8]." ".$row[9]."<span class='pull-right'><abbr class='timeago hidden-xs' title=''>".strftime("%d de %B",strtotime($row[3])) .", ".date("g:i a", strtotime($row[4]))."</abbr></span></h4>
