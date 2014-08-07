@@ -55,10 +55,12 @@ José Fernando Flores Santamaría <fer.santamaria@programmer.net>
 	$query="SELECT * FROM following where UserID='".$user."'";
 	$preFollowers=mysql_query($query,$dbconn);
 	$Followers=mysql_num_rows($preFollowers);
+	$Followers=$Followers-1;
 
 	$query="SELECT * FROM following where FollowerID='".$user."'";
 	$preFollowings=mysql_query($query,$dbconn);
 	$Following=mysql_num_rows($preFollowings);
+	$Following=$Following-1;
 
 	$query="SELECT * FROM post where UserID='".$user."' AND View='1'";
 	$prePost=mysql_query($query,$dbconn);
@@ -146,7 +148,7 @@ José Fernando Flores Santamaría <fer.santamaria@programmer.net>
 						<i class="fa fa-angle-down"></i>
 					</a>
 					<ul class="dropdown-menu">
-						<li><a href="../profile/"><i class="fa fa-user"></i> My Profil</a></li>
+						<li><a href="../profile/"><i class="fa fa-user"></i> My Profile</a></li>
 						<?php 
 							if ($_SESSION['Admin']=="1") {
 								echo"<li><a href='../admin/dashboard/'><i class='fa fa-wrench'></i> Administration Panel </a></li>";
@@ -229,7 +231,7 @@ José Fernando Flores Santamaría <fer.santamaria@programmer.net>
 						<h4 class="miembro-desde">Member since: April 2014</h4>
 						<br>
 						<br>
-						<div class="col-lg-offset-1 datos">
+						<div class="col-lg-offset-2 datos">
 						<h3 class="publicaciones">
 							<?php echo $PostCount;?><br>
 							Post
