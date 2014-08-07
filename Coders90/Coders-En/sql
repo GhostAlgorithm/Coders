@@ -1,0 +1,20 @@
+/*obtener el último mesaje de cada conversacion*/
+(SELECT messages.* FROM messages WHERE UserID='jos2014fe04f31875702' AND UserFrom='chr2014za04ch2303313')
+UNION 
+(SELECT messages.* FROM messages WHERE UserID='chr2014za04ch2303313' AND UserFrom='jos2014fe04f31875702') 
+ORDER BY Date DESC, Time DESC
+
+/*Nos devuelve el último mensaje del follower-following en la conversación*/
+SELECT * FROM 
+(SELECT messages.*, users.Name, users.LastName FROM messages INNER JOIN users ON users.UserID=messages.UserFrom Where messages.UserID='jos2014fe04f31875702'  ORDER BY messages.Date DESC, messages.Time DESC)subTbl 
+GROUP BY subTbl.UserFrom 
+
+/*Solo mis amigos y seguidores*/
+SELECT * FROM ((SELECT following.*, users.Name, users.LastName, users.Email, following.FollowerID as identifier FROM following INNER JOIN users ON users.UserID=following.FollowerID WHERE following.UserID='jos2014fe04f31875702' )
+UNION 
+(SELECT following.*, users.Name, users.LastName, users.Email, following.UserID as identifier  FROM following INNER JOIN users ON users.UserID=following.UserID WHERE following.FollowerID='jos2014fe04f31875702'))subTbl GROUP BY subTbl.identifier 
+
+/*Busqueda de solo followers y following */
+SELECT * FROM (SELECT * FROM ((SELECT following.*, users.Name, users.LastName, users.Email, following.FollowerID as identifier FROM following INNER JOIN users ON users.UserID=following.FollowerID WHERE following.UserID='jos2014fe04f31875702' )
+UNION 
+(SELECT following.*, users.Name, users.LastName, users.Email, following.UserID as identifier  FROM following INNER JOIN users ON users.UserID=following.UserID WHERE following.FollowerID='jos2014fe04f31875702'))subTbl GROUP BY subTbl.identifier)follow WHERE follow.Name LIKE '%ern%'

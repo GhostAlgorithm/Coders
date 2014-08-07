@@ -1,4 +1,21 @@
+<!--                Copyright (c) 2014 
+José Fernando Flores Santamaría <fer.santamaria@programmer.net>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+-->
 <?php
+	session_save_path("../../sessions/");
 	session_start();
 	error_reporting(0);
 	if(!isset($_SESSION['UserID']) && $_SESSION['Admin']!="1"){
@@ -56,7 +73,6 @@
 				</a>
 				<!-- /Logo Proyecto -->
 			</div>
-			
 			<!-- Menu -->					
 			<ul class="nav navbar-nav pull-right">
 				<!-- User Menu -->
@@ -67,9 +83,9 @@
 						<i class="fa fa-angle-down"></i>
 					</a>
 					<ul class="dropdown-menu">
-						<li><a href="../../profile/"><i class="fa fa-user"></i> My Profile</a></li>
+						<li><a href="#"><i class="fa fa-user"></i> My Profile</a></li>
 						<li><a href="../../dashboard/"><i class="fa fa-tachometer"></i> Go to Dashboard</a></li>
-						<li><a href="../../logout/index.php"><i class="fa fa-power-off"></i> Log Out</a></li>
+						<li><a href="../../logout/index.php"><i class="fa fa-power-off"></i> Log out</a></li>
 					</ul>
 				</li>
 				<!-- /User Menu -->
@@ -101,7 +117,7 @@
 					</a>
 				</li>
 				<li>
-					<a href="#">
+					<a href="../groups/">
 						<i class="fa fa-users fa-fw"></i><span class="menu-text">Groups</span>
 					</a>
 				</li>
@@ -144,7 +160,7 @@
 										 - Administration Panel - Users
 									</h3>
 								</div>
-								<div class="description">¡One line of code can change the world!</div>
+								<div class="description">One line of code can change the world!</div>
 							</div>
 						</div>
 					</div>
@@ -154,7 +170,7 @@
 						<div class="col-xs-12 col-md-11">
 							<div class="box">
 						    	<div class="box-title small">
-									<h4><i class="fa fa-search"></i>Search by User</h4>
+									<h4><i class="fa fa-search"></i>earch by user</h4>
 								</div>
 							</div>
 							<div class="input-group search-admin">
@@ -212,6 +228,7 @@
 <!--/PAGE -->
 <!-- JAVASCRIPTS -->
 <script type="text/javascript">
+
 	$( "#searchbar-admin" ).keyup(function(){
 		var text = $( "#searchbar-admin" ).val();
 		if (text.length>2) {
@@ -232,6 +249,7 @@
 		};
 	});
 
+</script>
 </script>
 <!-- AJAX -->
 <script src="../../Func.js"></script>

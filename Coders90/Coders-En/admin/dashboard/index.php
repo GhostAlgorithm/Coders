@@ -1,4 +1,21 @@
+﻿<!--                Copyright (c) 2014 
+José Fernando Flores Santamaría <fer.santamaria@programmer.net>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+-->
 <?php
+	session_save_path("../../sessions/");
 	session_start();
 	error_reporting(0);
 	if(!isset($_SESSION['UserID']) && $_SESSION['Admin']!="1"){
@@ -7,8 +24,8 @@
 		header('Location: ../../dashboard/');
 	}
 
-?>	
-﻿<!DOCTYPE html>
+?>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
@@ -61,9 +78,9 @@
 						<i class="fa fa-angle-down"></i>
 					</a>
 					<ul class="dropdown-menu">
-						<li><a href="../../profile/"><i class="fa fa-user"></i> My Profile</a></li>
-						<li><a href="../../dashboard/"><i class="fa fa-tachometer"></i> Go to dashboard</a></li>
-						<li><a href="../../logout/index.php"><i class="fa fa-power-off"></i> Log Out</a></li>
+						<li><a href="#"><i class="fa fa-user"></i> My Profile</a></li>
+						<li><a href="../../dashboard/"><i class="fa fa-tachometer"></i> Go to Dashboard</a></li>
+						<li><a href="../../logout/index.php"><i class="fa fa-power-off"></i> Log out</a></li>
 					</ul>
 				</li>
 				<!-- /User Menu -->
@@ -96,7 +113,7 @@
 							</a>
 						</li>
 						<li>
-							<a href="#">
+							<a href="../groups/">
 								<i class="fa fa-users fa-fw"></i><span class="menu-text">Groups</span>
 							</a>
 						</li>
@@ -123,7 +140,7 @@
 								<ul class="breadcrumb">
 									<li>
 										<i class="fa fa-home"></i>
-										<a href="../../dashboard/">Home</a>
+										<a href="../dashboard/">Home</a>
 									</li>
 								</ul>
 								<!-- /BREADCRUMBS -->
@@ -136,7 +153,7 @@
 										 - Administration Panel
 									</h3>
 								</div>
-								<div class="description">¡One line of code can change the world!</div>
+								<div class="description">One line of code can change the world!</div>
 							</div>
 						</div>
 					</div>
@@ -155,7 +172,7 @@
 							<div class="divide-20 hidden-xs col-md-3 clearfix"></div>
 							<div class="hidden-xs col-md-3 clearfix btn-editor"></div>
 							<div class="col-xs-12 col-md-3 clearfix div-editor">
-								<a href=""><button class="btn btn-lg btn-warning col-xs-12 col-md-12 btn-editor">Groups</button></a>
+								<a href="../groups/"><button class="btn btn-lg btn-warning col-xs-12 col-md-12 btn-editor">Groups</button></a>
 							</div>
 							<div class="col-xs-12 col-md-3 clearfix div-editor">
 								<a href=""><button class="btn btn-lg btn-purple col-xs-12 col-md-12 btn-editor">More</button></a>

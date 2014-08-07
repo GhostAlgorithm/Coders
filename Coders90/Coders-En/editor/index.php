@@ -1,23 +1,64 @@
+<!--                Copyright (c) 2014 
+José Fernando Flores Santamaría <fer.santamaria@programmer.net>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+-->
 <?php
+	session_save_path("../sessions/");
 	session_start();
 	error_reporting(0);
 	if(!isset($_SESSION['UserID'])){
 		header('Location: ../');
 	}
 
-	if (isset($_GET['id'])) {
+	if (isset($_GET['id']) && isset($_GET['type'])) {
+		$esp="false";
+		$type=$_GET['type'];
 		$Html = strpos($_GET['id'], ".html");
 	  	$Htm = strpos($_GET['id'], ".htm");
 	  	$Css = strpos($_GET['id'], ".css");
 	  	$Js = strpos($_GET['id'], ".js");
 
 	  	if ($Html==false && $Htm==false && $Css==false && $Js==false) {
-	  		$esp=true;
+	  		$esp="true";
+	  	}
+
+	  	$path="codefiles/".$_SESSION['UserID']."/".$_GET['id']."";
+
+	  	if (!file_exists($path)) {
+	  		header('Location: ../editor/');
+	  	}
+
+	  	if ($type=="javascript") {
+	  		$type="js";
+	  	}
+
+	  	if ($esp=="false") {
+	  		$validType=strpos($_GET['id'],$type);
+	  		if($validType==false){
+	  			header('Location: ../editor/');
+		  	}	
+	  	} else {
+	  		if($esp=="true" && $type!="php"){
+	  			header('Location: ../editor/');
+		  	}
 	  	}
 	}
 
-?>	
-﻿<!DOCTYPE html>
+	require("../SQLFunc.php");
+?>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
@@ -40,10 +81,8 @@
 	<link href="../font-awesome/css/font-awesome.min.css" rel="stylesheet">
 	<!-- FONTS -->
 	<link href='../css/fonts.css' rel='stylesheet' type='text/css'>
-	<!-- Favicon-->
-	<link rel="icon" type="image/png" href="../img/logo/Fav2.png" />
-
-	<link href="favicon.ico" rel="icon" type="image/x-icon"/>
+	<!-- Favicon -->
+	<link rel="shortcut icon" href="../common/img/favicon.png" />
 	<script>
 	var id="blank", type="blank";
 	var url = $(location).attr('href');
@@ -78,7 +117,7 @@
 			    Create: function() {
 				    if (tabTitle.val()!="") {
 				    	if (verifyName(tabTitle.val()+"."+tabContent.val())) {
-					      	alert('Ya existe un archivo con ese nombre')
+					      	$("#tab_title").attr("placeholder", "There is a file with the same name");
 					      	form[ 0 ].reset();
 					      }else{
 					      	addTab();
@@ -223,7 +262,7 @@
 		});
 	</script>
 </head>
-<body onunload="closeAlert()">
+<body>
 	<!-- Header de Pagina -->
 	<header class="navbar clearfix navbar-fixed-top" id="header">
 		<div class="container">
@@ -243,6 +282,25 @@
 			</div>
 			<!-- Menu -->					
 			<ul class="nav navbar-nav pull-right">
+				<!-- Notifications -->
+				<li class="dropdown" id="header-notification">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+						<i class="fa fa-bell"></i>
+						<span class="badge"><?php echo numberNotifications();?></span>						
+					</a>
+					<ul class="dropdown-menu notification" id="notifications">
+						<li class="dropdown-title">
+							<span><i class="fa fa-bell"></i>Notifications</span>
+						</li>
+						<?php
+						notifList();
+						?>
+						<li class="footer">
+							<a href="../notifications/">See all notifications  <i class="fa fa-arrow-circle-right"></i></a>
+						</li>
+					</ul>
+				</li>
+				<!-- /Notifications -->
 				<!-- User Menu -->
 				<li class="dropdown user" id="header-user">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -292,8 +350,8 @@
 								</a>
 							</li>
 							<li>
-								<a href="#">
-									<i class="fa fa-calendar fa-fw"></i><span class="menu-text">Planner
+								<a href="../messages/">
+									<i class="fa fa-envelope fa-fw"></i><span class="menu-text">Messages
 									</span>
 								</a>
 							</li>
@@ -345,12 +403,12 @@
 						<!-- Contenido general -->
 						<div class="row">
 							<div class="col-xs-12 col-md-12" >
-								<div id="dialog" title="New file">
+								<div id="dialog" title="Nuevo Archivo">
 								  <form>
 								    <fieldset class="ui-helper-reset">
-								      <label for="tab_title">File Name</label>
+								      <label for="tab_title">Filename:</label>
 								      <input type="text" name="tab_title" id="tab_title" autocomplete="off" class="ui-widget-content ui-corner-all" required>
-								      <label for="tab_content">Programming Language</label>
+								      <label for="tab_content">Programming language:</label>
 								      <select name="tab_content" id="tab_content" class="ui-widget-content ui-corner-all">
 								        <option value="html">HTML</option>
 								        <option value="php">PHP</option>
@@ -380,14 +438,14 @@
 								  </ul>
 								  <div id="tabs-1">
 								    <div id="aceEditor1" class="Editor" ><?php if (isset($_GET['id'])) {
-								    	$file = fopen("codefiles/".$_SESSION['UserID']."/".$_GET['id']."", "r") or exit("Unable to open file!");
+								    	$file = fopen("codefiles/".$_SESSION['UserID']."/".$_GET['id']."", "r") or exit("Error al abrir el archivo");
 										while(!feof($file)){
 										echo htmlentities(fgets($file));
 										}
 										fclose($file);
 										echo "</br>";
 								    } else {
-								    									    echo"                            <span><</span>CODERS<span>/></span>
+								    	echo"                                   <span><</span>CODERS<span>/></span>
                        ••• Code Editor •••
 
 In this panel you can create your own code files in order to increase your 

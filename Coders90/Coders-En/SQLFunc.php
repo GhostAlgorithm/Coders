@@ -1,4 +1,21 @@
+<!--                Copyright (c) 2014 
+José Fernando Flores Santamaría <fer.santamaria@programmer.net>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+-->
 <?php
+session_save_path("sessions/");
 setlocale(LC_ALL,"US");
 function UserData(){
 	include("BDD.php");
@@ -26,12 +43,12 @@ function NewsFeed(){
 			echo "
 			<div class='box border green' style='z-index:1; position:relative;'>
 		    	<div class='box-title small'>
-					<h4><i class='fa fa-code'></i>".$row[1]." ".$row[2]."</h4>
+					<h4><i class='fa fa-code'></i><a idf='".$row[0]."'  style='text-decoration: none; color:white; cursor:pointer;' class='profile'>".$row[1]." ".$row[2]."</a></h4>
 					<div class='pull-right'>
 						<span class='timeclass pull-right'>
 							<i class='fa fa-clock-o'></i>
 							<span>".strftime("%B %d",strtotime($row[5])) .", ".date("g:i a", strtotime($row[6]))."</span>
-							<span>&nbsp;&nbsp;<span class='compose tip-left' title='Delete Post'><i class='fa fa-times-circle delete-comment timeclass' title='Delete Post' idf='".$row[7]."' post-idf='".$row[7]."' onClick='delPost(this)'></i></span></span>
+							<span>&nbsp;&nbsp;<span class='compose tip-left' title='Delete post'><i class='fa fa-times-circle delete-comment timeclass' title='Delete post' idf='".$row[7]."' post-idf='".$row[7]."' onClick='delPost(this)'></i></span></span>
 						</span>
 					</div>
 				</div>	
@@ -48,7 +65,7 @@ function NewsFeed(){
 							</div>
 						</div>
 						<div class='col-xs-2 col-md-1'> 
-							<a><h3 class='pull-right'><span class='compose tip-left' title='Comments'><i class='fa fa-comments' idf='".$row[7]."''></i></span></h3></a>
+							<a><h3 class='pull-right'><span class='compose tip-left' title='Comments'><i class='fa fa-comments' idf='".$row[7]."'></i></span></h3></a>
 						</div>
 					</span>
 				</div>	
@@ -81,7 +98,7 @@ function NewsFeed(){
 							</div>
 						</div>
 						<div class='col-xs-2 col-md-1'> 
-							<a><h3 class='pull-right'><span class='compose tip-left' title='Comments'><i class='fa fa-comments' idf='".$row[7]."''></i></span></h3></a>
+							<a><h3 class='pull-right'><span class='compose tip-left' title='Comments'><i class='fa fa-comments' idf='".$row[7]."'></i></span></h3></a>
 						</div>
 					</span>
 				</div>	
@@ -106,10 +123,10 @@ function UsersList($start,$length){
 		echo "
 			<tr>
 				<td class='table-rows'><img class='img-perfil' src='../../img/avatars/".$row[0].".jpg' onerror=\"this.src='../../img/avatars/default.jpg'\" width='40' height='40'></td>
-				<td class='table-rows'><h4>".$row[0]."</h4></td>
-				<td class='table-rows'><h4>".$row[1]." ".$row[2]."</h4></td>
-				<td class='table-rows'><h4>".$row[3]."</h4></td>
-				<td class='actions'><a href='actions.php?user=".$row[0]."'><h4><i class='fa fa-wrench'></i></h4></a></td>
+				<td class='table-rows'>".$row[0]."</td>
+				<td class='table-rows'>".$row[1]." ".$row[2]."</td>
+				<td class='table-rows'>".$row[3]."</td>
+				<td class='actions'><a href='actions.php?user=".$row[0]."'><i class='fa fa-wrench'></i></a></td>
 			  </tr>
 		";
 	}
@@ -154,7 +171,7 @@ function paginationUser($actPage,$querySql){
 	}
 
 	echo "<div class='col-xs-12 col-md-12'>
-			<center><h5>Page ".$actPage." of"." ".$totalPages."</h5</center>
+			<center><h5>Page ".$actPage." of"." ".$totalPages."</h5><h6>(Showing 3 results per page)</h6></center>
 		  </div>";
 
 	mysql_close();
@@ -173,7 +190,7 @@ function postList($idf,$start,$length){
 			<tr>
 				<td class='table-rows'><input type='checkbox' name='postIdf[]' value='".$row[3]."'></td>
 				<td class='table-rows'>".htmlentities($row[0],ENT_NOQUOTES,"UTF-8")."</td>
-				<td class='table-rows'>".date("d-m-Y", strtotime($row[1]))."</td>
+				<td class='table-rows'>".date("m-d-Y", strtotime($row[1]))."</td>
 				<td class='table-rows'>".date("g:i a", strtotime($row[2]))."</td>
 				<td class='table-rows'><input type='button' class='btn btn-success btn-xs' value='Visible' style='width:65px;' disabled></td>
 				<td class='actions'><a href='postActions.php?postIdf=".$row[3]."'><i class='fa fa-wrench'></i></a></td>
@@ -183,9 +200,9 @@ function postList($idf,$start,$length){
 			<tr>
 				<td class='table-rows'><input type='checkbox' name='postIdf[]' value='".$row[3]."'></td>
 				<td class='table-rows'>".htmlentities($row[0],ENT_NOQUOTES,"UTF-8")."</td>
-				<td class='table-rows'>".date("d-m-Y", strtotime($row[1]))."</td>
+				<td class='table-rows'>".date("m-d-Y", strtotime($row[1]))."</td>
 				<td class='table-rows'>".date("g:i a", strtotime($row[2]))."</td>
-				<td class='table-rows'><input type='button' class='btn btn-danger btn-xs' value='Hidden' style='width:65px;' disabled></td>
+				<td class='table-rows'><input type='button' class='btn btn-danger btn-xs' value='Eliminado' style='width:65px;' disabled></td>
 				<td class='actions'><a href='postActions.php?postIdf=".$row[3]."'><i class='fa fa-wrench'></i></a></td>
 			</tr>";
 		}
@@ -231,7 +248,7 @@ function paginationPost($idf,$actPage,$querySql){
 	}
 
 	echo "<div class='col-xs-12 col-md-12'>
-			<center><h5>Page ".$actPage." of"." ".$totalPages."</h5></center>
+			<center><h5>Page ".$actPage." of"." ".$totalPages."</h5><h6>(Showing 3 results per page)</h6></center>
 		  </div>";
 
 	mysql_close();
@@ -278,8 +295,8 @@ function myGroups(){
 				<div class='col-xs-12 col-md-10 col-md-offset-1' style='background-color: #".$row[5]."; border-bottom: solid 5px #".$border.";color: white;'>
 					<span class='pull-right'></br>".usersGroup($row[0])."</span>
 					<a hreF='dashboard.php?group=".$row[0]."' style='text-decoration: none; color: white;'><h4>".$row[1]."</h4></a>
-					<h6>Created:"." ".$row[7]." ".$row[8]."</h6>
-					<h6>Last Update: ".lastUpdate($row[0])."</h6>
+					<h6>Created by:"." ".$row[7]." ".$row[8]."</h6>
+					<h6>Last update: ".lastUpdate($row[0])."</h6>
 				</div>
 			</div>
 			<div class='divide-15'></div>";
@@ -289,7 +306,7 @@ function myGroups(){
 					<span class='pull-right'></br>".usersGroup($row[0])."</span>
 					<a hreF='dashboard.php?group=".$row[0]."' style='text-decoration: none; color: white;'><h4>".$row[1]."</h4></a>
 					<h6>Created by:"." ".$row[7]." ".$row[8]."</h6>
-					<h6>Last Update: ".lastUpdate($row[0])."</h6>
+					<h6>Last update: ".lastUpdate($row[0])."</h6>
 				</div>
 			</div>
 			<div class='divide-15'></div>";
@@ -340,7 +357,7 @@ function myOwnGroups(){
 					<span class='pull-right'></br>".usersGroup($row[0])."</span>
 					<a hreF='dashboard.php?group=".$row[0]."' style='text-decoration: none; color: white;'><h4>".$row[1]."</h4></a>
 					<h6>Created by:"." ".$row[7]." ".$row[8]."</h6>
-					<h6>Last Update: ".lastUpdate($row[0])."</h6>
+					<h6>Last update: ".lastUpdate($row[0])."</h6>
 				</div>
 			</div>
 			<div class='divide-15'></div>";
@@ -356,9 +373,24 @@ function usersGroup($id){
 	$totalUser=mysql_num_rows($result);
 
 	if ($totalUser==1) {
-		$totalUser = "1 User";
+		$totalUser = "1 user";
 	} else {
-		$totalUser = $totalUser." Users";
+		$totalUser = $totalUser." users";
+	}
+	mysql_close();
+	return $totalUser;
+}
+
+function usersGroupAdmin($id){
+	include("../../BDD.php");
+	$query="SELECT * FROM user_group WHERE GroupID='".$id.	"'";
+	$result=mysql_query($query,$dbconn);
+	$totalUser=mysql_num_rows($result);
+
+	if ($totalUser==1) {
+		$totalUser = "1 user";
+	} else {
+		$totalUser = $totalUser." users";
 	}
 	mysql_close();
 	return $totalUser;
@@ -372,7 +404,7 @@ function lastUpdate($id){
 	$last=mysql_fetch_array($result);
 	mysql_close();
 	if($last[0]==""){
-		return "There are no post";
+		return "There are not post yet";
 	} else {
 		return $lastUp=strftime("%B %d",strtotime($last[0])).", ".date("g:i a", strtotime($last[1]));
 	}
@@ -394,8 +426,8 @@ function NewsFeedGroups($id){
 					<div class='pull-right'>
 						<span class='timeclass pull-right'>
 							<i class='fa fa-clock-o'></i>
-							<span>".strftime("%B %d",strtotime($row[4])) .", ".date("g:i a", strtotime($row[5]))."</span>
-							<span>&nbsp;&nbsp;<span class='compose tip-left' title='Delete Post'><i class='fa fa-times-circle delete-comment timeclass' title='Delete Post' idf='".$row[0]."' post-idf='".$row[0]."' onClick='delPost(this)'></i></span></span>
+							<span>".strftime("%B %d",strtotime($row[5])) .", ".date("g:i a", strtotime($row[5]))."</span>
+							<span>&nbsp;&nbsp;<span class='compose tip-left' title='Delete post'><i class='fa fa-times-circle delete-comment timeclass' title='Delete post' idf='".$row[0]."' post-idf='".$row[0]."' onClick='delPost(this)'></i></span></span>
 						</span>
 					</div>
 				</div>	
@@ -428,7 +460,7 @@ function NewsFeedGroups($id){
 					<div class='pull-right'>
 						<span class='timeclass pull-right'>
 							<i class='fa fa-clock-o'></i>
-							<span>".strftime("%B %d",strtotime($row[4])) .", ".date("g:i a", strtotime($row[5]))."</span>
+							<span>".strftime("%B %d",strtotime($row[5])) .", ".date("g:i a", strtotime($row[5]))."</span>
 						</span>
 					</div>
 				</div>	
@@ -496,7 +528,7 @@ function myFeed($user){
 	
 	while($row=mysql_fetch_array($result)){
 				
-		if ($row[3]==$_SESSION['UserID']) {
+		//if ($row[3]==$_SESSION['UserID']) {
 			echo "
 			<div class='box border green' style='z-index:1; position:relative;'>
 		    	<div class='box-title small'>
@@ -504,7 +536,7 @@ function myFeed($user){
 					<div class='pull-right'>
 						<span class='timeclass pull-right'>
 							<i class='fa fa-clock-o'></i>
-							<span>".date("m-d-Y", strtotime($row[3])) ." at ".date("g:i a", strtotime($row[4]))."</span>
+							<span>".strftime("%B %d",strtotime($row[3])) .", ".date("g:i a", strtotime($row[4]))."</span>
 							<span>&nbsp;&nbsp;<span class='compose tip-left' title='Delete Post'><i class='fa fa-times-circle delete-comment timeclass' title='Delete Post' idf='".$row[7]."' post-idf='".$row[7]."' onClick='delPost(this)'></i></span></span>
 						</span>
 					</div>
@@ -530,50 +562,487 @@ function myFeed($user){
 			<div class='comments pull-right' id='".$row[0]."'>
 			</diV>
 			<div class='divide-25'></div>";
-		} else {
-			echo "
-			<div class='box border green' style='z-index:1; position:relative;'>
-		    	<div class='box-title small'>
-					<h4><i class='fa fa-code'></i>".$row[6]." ".$row[7]."</h4>
-					<div class='pull-right'>
-						<span class='timeclass pull-right'>
-							<i class='fa fa-clock-o'></i>
-							<span>".date("m-d-Y", strtotime($row[3])) ." at ".date("g:i a", strtotime($row[4]))."</span>
-						</span>
-					</div>
-				</div>	
-				<div class='box-body clearfix' style='word-wrap:break-word;'>
-					<span>
-						<div class='col-xs-2 col-md-1'> 
-							<img class='img-perfil' src='../img/avatars/".$row[1].".jpg' onerror=\"this.src='../img/avatars/default.jpg'\" width='50' height='50'>
-						</div>
-						<div class='col-xs-8 col-md-10'>
-							<div class='col-xs-12 col-md-12' style='word-wrap:break-word;'>
-								<h5>
-									<span>".htmlentities($row[2],ENT_NOQUOTES,"UTF-8")."</span>
-								</h5>
-							</div>
-						</div>
-						<div class='col-xs-2 col-md-1'> 
-							<a><h3 class='pull-right'><span class='compose tip-left' title='Comments'><i class='fa fa-comments' idf='".$row[0]."''></i></span></h3></a>
-						</div>
-					</span>
-				</div>	
-			</div>
-			<div class='comments pull-right' id='".$row[0]."'>
-			</diV>
-			<div class='divide-25'></div>";
-		}
-			
 	}
 	mysql_close();
 
 
 }
 
+function myMessages($userTo){
+	include("BDD.php");
+	$query="SELECT sub.UserFrom, users.Name, users.LastName FROM (SELECT messages.*, users.Name, users.LastName FROM messages INNER JOIN users ON users.UserID=messages.UserFrom Where messages.UserID='".$_SESSION['UserID']."' ORDER BY messages.Date DESC, messages.Time DESC Limit 5 )sub INNER JOIN users ON users.UserID=sub.UserFrom GROUP BY sub.UserFrom";
+	$result=mysql_query($query,$dbconn);
+	
+	echo "<li class='dropdown' id='header-message'>
+				<a href='#' class='dropdown-toggle' data-toggle='dropdown'>
+				<i class='fa fa-envelope'></i>
+				</a>
+				<ul class='dropdown-menu inbox'>
+					<li class='dropdown-title'>
+						<span><i class='fa fa-envelope-o'></i>Mensajes</span>
+						<span class='compose pull-right tip-right' title='Create a new message'><i class='fa fa-pencil-square-o'></i></span>
+					</li>
+					<li>";
+
+	while($row=mysql_fetch_array($result)){
+
+		$lastMessage="(SELECT messages.* FROM messages WHERE UserID='".$_SESSION['UserID']."' AND UserFrom='".$row[0]."') UNION (SELECT messages.* FROM messages WHERE UserID='".$row[0]."' AND UserFrom='".$_SESSION['UserID']."') ORDER BY Date DESC, Time DESC LIMIT 1";
+		$resultLast=mysql_query($lastMessage,$dbconn);
+
+		while($rowLast=mysql_fetch_array($resultLast)){
+
+			if (strlen($rowLast[3])>40) {
+				$content=substr($rowLast[3], 0,40)." ...";
+			} else {
+				$content=$rowLast[3];
+			}
+
+			echo "<li>
+				<a href='../messages/?f=".$row[0]."'>
+					<img src='../img/avatars/".$row[0].".jpg' alt='' onerror='this.src='../img/avatars/default.jpg''/>
+					<span class='body'>
+						<span class='from'>".$row[1]." ".$row[2]."</span>
+						<span class='message' style='word-break:break-all;'>
+						".$content."
+						</span> 
+						<span class='time'>
+							<i class='fa fa-clock-o'></i>
+							<span>".strftime("%B %d",strtotime($rowLast[5])).", ".date("g:i a", strtotime($rowLast[6]))."</span>
+						</span>
+					</span>
+					 
+				</a>
+			</li>";
+		}
+
+	}
+
+	echo "	<li class='footer'>
+				<a href='#'>See all messages<i class='fa fa-arrow-circle-right'></i></a>
+			</li>
+			</ul>
+		</li>";
+
+
+	mysql_close();
+}
+
+function messageList(){
+	include("BDD.php");
+	$query="SELECT messages.*, users.Name, users.LastName FROM messages INNER JOIN users ON users.UserID=messages.UserFrom Where messages.UserID='".$_SESSION['UserID']."' GROUP BY messages.UserFrom  ORDER BY messages.Date ASC, messages.Time ASC";
+	$result=mysql_query($query,$dbconn);
+
+	while ($row=mysql_fetch_array($result)) {
+		if (strlen($row[3])>75) {
+			$content=substr($row[3], 0,75)." ...";
+		} else {
+			$content=$row[3];
+		}
+
+		echo "<a href='../messages/?f=".$row[2]."' class='styleLess'>
+				<div class='media-body chat-pop messages'>
+					<img class='img-perfil pull-left spacer-7' alt='User image'  width='50px' height='50px' src='../img/avatars/".$row[2].".jpg'>
+					<h4 class='media-heading padding-left'>".$row[8]." ".$row[9]."<span class='pull-right'><i class='fa fa-clock-o'></i> <abbr class='timeago' title='".date('d/m/Y', strtotime($row[5]))." at ".date('g:i a', strtotime($row[6]))."' >".strftime("%B %d",strtotime($row[5])).", ".date("g:i a", strtotime($row[6]))."</abbr> </span></h4>
+					<p class='padding-left'>".$content."</p>
+				</div>
+			</a>
+			<div class='divide-20'></div>";
+	}
+	mysql_close();
+}
+
+function messagesList(){
+	include("BDD.php");
+	$query="SELECT sub.UserFrom, users.Name, users.LastName FROM (SELECT messages.*, users.Name, users.LastName FROM messages INNER JOIN users ON users.UserID=messages.UserFrom Where messages.UserID='".$_SESSION['UserID']."' ORDER BY messages.Date DESC, messages.Time DESC Limit 5 )sub INNER JOIN users ON users.UserID=sub.UserFrom GROUP BY sub.UserFrom";
+	$result=mysql_query($query,$dbconn);
+
+	while($row=mysql_fetch_array($result)){
+
+		$lastMessage="(SELECT messages.* FROM messages WHERE UserID='".$_SESSION['UserID']."' AND UserFrom='".$row[0]."') UNION (SELECT messages.* FROM messages WHERE UserID='".$row[0]."' AND UserFrom='".$_SESSION['UserID']."') ORDER BY Date DESC, Time DESC LIMIT 1";
+		$resultLast=mysql_query($lastMessage,$dbconn);
+
+		while($rowLast=mysql_fetch_array($resultLast)){
+
+			if (strlen($rowLast[3])>40) {
+				$content=substr($rowLast[3], 0,40)." ...";
+			} else {
+				$content=$rowLast[3];
+			}
+
+			echo "<a href='../messages/?f=".$row[0]."' class='styleLess'>
+				<div class='media-body chat-pop messages'>
+					<img class='img-perfil pull-left spacer-7' alt='User image'  width='50px' height='50px' src='../img/avatars/".$row[0].".jpg'>
+					<h4 class='media-heading padding-left'>".$row[1]." ".$row[2]."<span class='pull-right'><i class='fa fa-clock-o'></i> <abbr class='timeago' title='".date('d/m/Y', strtotime($rowLast[5]))." at ".date('g:i a', strtotime($rowLast[6]))."' >".strftime("%B %d",strtotime($rowLast[5])).", ".date("g:i a", strtotime($rowLast[6]))."</abbr> </span></h4>
+					<p class='padding-left'>".$content."</p>
+				</div>
+			</a>
+			<div class='divide-20'></div>";
+		}
+
+	}
+
+	mysql_close();
+}
+
+function groupList($u,$start,$length){
+	include("../../BDD.php");
+	$query="SELECT groups.* FROM groups WHERE UserID='".$u."' LIMIT ".$start.", ".$length;
+	$result=mysql_query($query,$dbconn);
+
+	while($row=mysql_fetch_array($result)){
+		echo "<tr>
+			<td class='table-rows'>".$row[0]."</td>
+			<td class='table-rows'>".$row[1]."</td>
+			<td class='table-rows'>".$row[2]."</td>
+			<td class='actions'><a href='groupsActions.php?groupIdf=".$row[0]."'><i class='fa fa-wrench'></i></a></td>
+		</tr>";
+	}
+}
+
+function paginationGroups($idf,$actPage,$querySql){
+	include("../../BDD.php");
+	$result=mysql_query($querySql,$dbconn);
+	$totalPost=mysql_num_rows($result);
+	$totalPages=ceil($totalPost / 3);
+	$next=$actPage+1;
+	$previous=$actPage-1;
+
+	if ($totalPages==1){
+		echo "<ul class='pager'>
+			<li class='previous disabled'><a href=''>&larr; Previous</a></li>
+			<li class='next disabled'><a href=''>Next &rarr;</a></li>
+	      </ul>";
+	}
+	
+
+	if ($actPage==1 && $totalPages!=1){
+		echo "<ul class='pager'>
+			<li class='previous disabled'><a href=''>&larr; Previous</a></li>
+			<li class='next'><a href='actions.php?user=".$idf."&page=".$next."'>Next &rarr;</a></li>
+	      </ul>";
+	}
+
+	if ($actPage!=1 && $actPage!=$totalPages){
+		echo "<ul class='pager'>
+			<li class='previous'><a href='index.php?page='".$previous."'>&larr; Previous</a></li>
+			<li class='next'><a href='actions.php?user=".$idf."&page=".$next."'>Next &rarr;</a></li>
+	      </ul>";
+	}
+
+	if ($actPage==$totalPages && $actPage!=1){
+		echo "<ul class='pager'>
+			<li class='previous'><a href='actions.php?user=".$idf."&page=".$previous."'>&larr; Previous</a></li>
+			<li class='next disabled'><a href=''>Next &rarr;</a></li>
+	      </ul>";
+	}
+
+	echo "<div class='col-xs-12 col-md-12'>
+			<center><h5>Page ".$actPage." of"." ".$totalPages."</h5><h6>(Showing 3 results per page)</h6></center>
+		  </div>";
+
+	mysql_close();
+}
+
+function searchList($tag,$start,$length){
+	include("../BDD.php");
+	$post="SELECT users.UserID, users.Name, users.LastName, userinformation.Description, userinformation.RegistryDate FROM users INNER JOIN userinformation ON users.UserID = userinformation.UserID WHERE users.Name LIKE '".$tag."%' OR users.LastName LIKE '".trim($tag)."%' OR users.Email LIKE '".trim($tag)."%' LIMIT ".$start.",".$length."";
+	$result=mysql_query($post,$dbconn);
+	$totalUsers=mysql_num_rows($result);
+	$totalPages=ceil($totalUsers / 3);
+	
+	while($row=mysql_fetch_array($result)){
+		echo "<a href='../profile/?user=".$row[0]."' class='styleLess'>
+				<div class='media-body chat-pop messages'>		
+					<img class='img-perfil pull-left spacer-7' alt='User image'  width='50px' height='50px' src='../img/avatars/".$row[0].".jpg' onerror=\"this.src='../img/avatars/default.jpg'\">
+					<h4 class='media-heading padding-left'>".$row[1]." ".$row[2]."<span class='pull-right'><abbr class='timeago hidden-xs' title=''>Member since ".strftime("%B %Y",strtotime($row[4]))."</abbr></span></h4>
+					<p class='padding-left'>".$row[3]."</p>
+				</div>
+			</a>
+			<div class='divide-20'></div>";
+	}
+	mysql_close();
+}
+
+function paginationSearch($tag,$actPage,$querySql){
+	include("../BDD.php");
+	$result=mysql_query($querySql,$dbconn);
+	$totalUsers=mysql_num_rows($result);
+	$totalPages=ceil($totalUsers / 3);
+	$next=$actPage+1;
+	$previous=$actPage-1;
+	
+	if ($totalPages==1){
+		echo "<ul class='pager'>
+			<li class='previous disabled'><a href=''>&larr; Previous</a></li>
+			<li class='next disabled'><a href=''>Next &rarr;</a></li>
+	      </ul>";
+	}
+	
+
+	if ($actPage==1 && $totalPages!=1){
+		echo "<ul class='pager'>
+			<li class='previous disabled'><a href=''>&larr; Previous</a></li>
+			<li class='next'><a href='index.php?tag=".$tag."&page=".$next."'>Next &rarr;</a></li>
+	      </ul>";
+	}
+
+	if ($actPage!=1 && $actPage!=$totalPages){
+		echo "<ul class='pager'>
+			<li class='previous'><a href=index.php?tag=".$tag."&page='".$previous."'>&larr; Previous</a></li>
+			<li class='next'><a href='index.php?tag=".$tag."&page=".$next."'>Next &rarr;</a></li>
+	      </ul>";
+	}
+
+	if ($actPage==$totalPages && $actPage!=1){
+		echo "<ul class='pager'>
+			<li class='previous'><a href='index.php?tag=".$tag."&page=".$previous."'>&larr; Previous</a></li>
+			<li class='next disabled'><a href=''>Next &rarr;</a></li>
+	      </ul>";
+	}
+
+	echo "<div class='col-xs-12 col-md-12'>
+			<center><h5>Page ".$actPage." of"." ".$totalPages."</h5><h6>(Showing 3 results per page)</h6></center>
+		  </div>";
+
+	mysql_close();
+}
+
+function notifList(){
+	include("../BDD.php");
+
+	$query="SELECT * FROM ((SELECT notifications.*, users.Name, users.LastName FROM notifications INNER JOIN users ON users.UserID=notifications.User WHERE notifications.UserID='".$_SESSION['UserID']."' AND View='0')
+	UNION
+	(SELECT notifications.*, users.Name, users.LastName FROM notifications INNER JOIN users ON users.UserID=notifications.User WHERE notifications.UserID='".$_SESSION['UserID']."' AND View='1'))subTbl ORDER BY subTbl.Date DESC, subTbl.TIME DESC LIMIT 6";
+	$result=mysql_query($query,$dbconn);
+
+	while ($row=mysql_fetch_array($result)) {
+		$type=$row[6];
+		switch ($type) {
+			case '1':
+				echo "<li>
+						<a href='../content/?r=post&i=".$row[7]."' idf='".$row[0]."' class='notifier'>
+							<span class='label-notif' style='color: #a696ce'><i class='fa fa-comment'></i></span>
+							<span class='body'>
+								<span class='message'>".$row[8]." ".$row[9]." commented your post </span>
+							</span>
+						</a>
+					</li>";
+				break;
+			
+			case '2':
+				echo "<li>
+						<a href='../groups/dashboard.php?group=".$row[7]."' idf='".$row[0]."' class='notifier'>
+							<span class='label-notif' style='color: #757575'><i class='fa fa-edit'></i></span>
+							<span class='body'>
+								<span class='message'>".$row[8]." ".$row[9]." posted in ".groupName($row[7])."</span>
+							</span>
+						</a>
+					</li>";
+				break;
+
+			case '3':
+				$sql="SELECT GroupID FROM post_group WHERE PostID='".$row[7]."' LIMIT 1";
+				$resSql=mysql_query($sql,$dbconn);
+				while ($rowSQL=mysql_fetch_array($resSql)) {
+					$gID=$rowSQL[0];
+				}
+				echo "<li>
+						<a href='../groups/dashboard.php?group=".$gID."' idf='".$row[0]."' class='notifier'>
+							<span class='label-notif' style='color: #f0ad4e'><i class='fa fa-comments'></i></span>
+							<span class='body'>
+								<span class='message'>".$row[8]." ".$row[9]." commented your post in ".groupName($gID)."</span>
+							</span>
+						</a>
+					</li>";
+				break;
+
+			case '4':
+				echo "<li>
+						<a href='../groups/workspace.php?group=".$row[7]."' idf='".$row[0]."' class='notifier'>
+							<span class='label-notif' style='color: #d9534f'><i class='fa fa-file-o'></i></span>
+							<span class='body'>
+								<span class='message'>".$row[8]." ".$row[9]." uploaded a file in ".groupName($row[7])."</span>
+							</span>
+						</a>
+					</li>";
+				break;
+			
+			case '5':
+				$total=explode("-", $row[7]);
+
+				if ($total[1]=='1') {
+					echo "<li>
+						<a href='../groups/members.php?group=".$total[0]."' idf='".$row[0]."' class='notifier'>
+							<span class='label-notif' style='color: #70afc4'><i class='fa fa-users'></i></span>
+							<span class='body'>
+								<span class='message'>".$row[8]." ".$row[9]." add ".$total[1]." member in ".groupName($total[0])."</span>
+							</span>
+						</a>
+					</li>";
+				} else {
+					echo "<li>
+						<a href='../groups/members.php?group=".$total[0]."' idf='".$row[0]."' class='notifier'>
+							<span class='label-notif' style='color: #70afc4'><i class='fa fa-users'></i></span>
+							<span class='body'>
+								<span class='message'>".$row[8]." ".$row[9]." add ".$total[1]." members in en ".groupName($total[0])."</span>
+							</span>
+						</a>
+					</li>";
+				}
+				
+				break;
+				
+			case '6':
+				echo "<li>
+						<a href='../profile/?user=".$row[7]."' idf='".$row[0]."' class='notifier'>
+							<span class='label-notif' style='color: #a8bc7b'><i class='fa fa-user'></i></span>
+							<span class='body'>
+								<span class='message'>".$row[8]." ".$row[9]." is following you!</span>
+							</span>
+						</a>
+					</li>";
+				break;		
+		}
+	}
+}
+
+function numberNotifications(){
+	include("../BDD.php");
+
+	$query="SELECT notifications.*, users.Name, users.LastName FROM notifications INNER JOIN users ON users.UserID=notifications.User WHERE notifications.UserID='".$_SESSION['UserID']."' AND View='0' ORDER BY Date DESC, TIME DESC";
+	$result=mysql_query($query,$dbconn);
+	$total=mysql_num_rows($result);
+
+	return $total;
+}
+
+function groupName($idf){
+	include("../BDD.php");
+	$singleQuery="SELECT Name FROM groups WHERE GroupID='".$idf."' LIMIT 1";
+	$singleResult=mysql_query($singleQuery,$dbconn);
+
+	while ($singleRow=mysql_fetch_array($singleResult)) {
+		$name=$singleRow[0];
+	}
+
+	return $name;
+}
+
+function notifications($view){
+	include("../BDD.php");
+	$post="SELECT notifications.*, users.Name, users.LastName FROM notifications INNER JOIN users ON users.UserID=notifications.User WHERE notifications.UserID='".$_SESSION['UserID']."' AND View='".$view."' ORDER BY Date DESC, TIME DESC";
+	$result=mysql_query($post,$dbconn);
+	$totalNotif=mysql_num_rows($result);
+
+	if ($totalNotif=="0") {
+		echo"<center><h4>There are no notifications to review</h4></center><div class='divide-15'></div>";
+	}
+
+	while ($row=mysql_fetch_array($result)) {
+		$type=$row[6];
+		switch ($type) {
+			case '1':
+				echo "<li>
+						<a href='../content/?r=post&i=".$row[7]."' idf='".$row[0]."' class='notifier styleLess'>
+							<div class='media-body chat-pop messages'>		
+								<img class='img-perfil pull-left spacer-7' alt='User image'  width='50px' height='50px' src='../img/avatars/".$row[5].".jpg' onerror=\"this.src='../img/avatars/default.jpg'\">
+								<h4 class='media-heading padding-left'>".$row[8]." ".$row[9]."<span class='pull-right'><abbr class='timeago hidden-xs' title=''>".strftime("%B %d",strtotime($row[3])) .", ".date("g:i a", strtotime($row[4]))."</abbr></span></h4>
+								<p class='padding-left'>Has commented your post</p>
+							</div>
+						</a>
+					</li>
+					<div class='divide-20'></div>";
+				break;
+			
+			case '2':
+				echo "<li>
+						<a href='../groups/dashboard.php?group=".$row[7]."' idf='".$row[0]."' class='notifier styleLess'>
+							<div class='media-body chat-pop messages'>		
+								<img class='img-perfil pull-left spacer-7' alt='User image'  width='50px' height='50px' src='../img/avatars/".$row[5].".jpg' onerror=\"this.src='../img/avatars/default.jpg'\">
+								<h4 class='media-heading padding-left'>".$row[8]." ".$row[9]."<span class='pull-right'><abbr class='timeago hidden-xs' title=''>".strftime("%B %d",strtotime($row[3])) .", ".date("g:i a", strtotime($row[4]))."</abbr></span></h4>
+								<p class='padding-left'>Has posted in ".groupName($row[7])."</p>
+							</div>
+						</a>
+					</li>
+					<div class='divide-20'></div>";
+				break;
+
+			case '3':
+				$sql="SELECT GroupID FROM post_group WHERE PostID='".$row[7]."' LIMIT 1";
+				$resSql=mysql_query($sql,$dbconn);
+				while ($rowSQL=mysql_fetch_array($resSql)) {
+					$gID=$rowSQL[0];
+				}
+				echo "<li>
+						<a href='../groups/dashboard.php?group=".$gID."' idf='".$row[0]."' class='notifier styleLess'>
+							<div class='media-body chat-pop messages'>		
+								<img class='img-perfil pull-left spacer-7' alt='User image'  width='50px' height='50px' src='../img/avatars/".$row[5].".jpg' onerror=\"this.src='../img/avatars/default.jpg'\">
+								<h4 class='media-heading padding-left'>".$row[8]." ".$row[9]."<span class='pull-right'><abbr class='timeago hidden-xs' title=''>".strftime("%B %d",strtotime($row[3])) .", ".date("g:i a", strtotime($row[4]))."</abbr></span></h4>
+								<p class='padding-left'>Has commented your post in ".groupName($gID)."</p>
+							</div>
+						</a>
+					</li>
+					<div class='divide-20'></div>";
+				break;
+
+			case '4':
+				echo "<li>
+						<a href='../groups/workspace.php?group=".$row[7]."' idf='".$row[0]."' class='notifier styleLess'>
+							<div class='media-body chat-pop messages'>		
+								<img class='img-perfil pull-left spacer-7' alt='User image'  width='50px' height='50px' src='../img/avatars/".$row[5].".jpg' onerror=\"this.src='../img/avatars/default.jpg'\">
+								<h4 class='media-heading padding-left'>".$row[8]." ".$row[9]."<span class='pull-right'><abbr class='timeago hidden-xs' title=''>".strftime("%B %d",strtotime($row[3])) .", ".date("g:i a", strtotime($row[4]))."</abbr></span></h4>
+								<p class='padding-left'>Has uploaded a file in ".groupName($row[7])."</p>
+							</div>
+						</a>
+					</li>
+					<div class='divide-20'></div>";
+				break;
+			
+			case '5':
+				$total=explode("-", $row[7]);
+
+				if ($total[1]=='1') {
+					echo "<li>
+						<a href='../groups/members.php?group=".$total[0]."' idf='".$row[0]."' class='notifier styleLess'>
+							<div class='media-body chat-pop messages'>		
+								<img class='img-perfil pull-left spacer-7' alt='User image'  width='50px' height='50px' src='../img/avatars/".$row[5].".jpg' onerror=\"this.src='../img/avatars/default.jpg'\">
+								<h4 class='media-heading padding-left'>".$row[8]." ".$row[9]."<span class='pull-right'><abbr class='timeago hidden-xs' title=''>".strftime("%B %d",strtotime($row[3])) .", ".date("g:i a", strtotime($row[4]))."</abbr></span></h4>
+								<p class='padding-left'>Added ".$total[1]." member in ".groupName($total[0])."</p>
+							</div>
+						</a>
+					</li>
+					<div class='divide-20'></div>";
+				} else {
+					echo "<li>
+						<a href='../groups/members.php?group=".$total[0]."' idf='".$row[0]."' class='notifier styleLess'>
+							<div class='media-body chat-pop messages'>		
+								<img class='img-perfil pull-left spacer-7' alt='User image'  width='50px' height='50px' src='../img/avatars/".$row[5].".jpg' onerror=\"this.src='../img/avatars/default.jpg'\">
+								<h4 class='media-heading padding-left'>".$row[8]." ".$row[9]."<span class='pull-right'><abbr class='timeago hidden-xs' title=''>".strftime("%B %d",strtotime($row[3])) .", ".date("g:i a", strtotime($row[4]))."</abbr></span></h4>
+								<p class='padding-left'>Add ".$total[1]." members in ".groupName($total[0])."</p>
+							</div>
+						</a>
+					</li>
+					<div class='divide-20'></div>";
+				}
+				
+				break;
+				
+			case '6':
+				echo "<li>
+						<a href='../profile/?user=".$row[7]."' idf='".$row[0]."' class='notifier styleLess'>
+							<div class='media-body chat-pop messages'>		
+								<img class='img-perfil pull-left spacer-7' alt='User image'  width='50px' height='50px' src='../img/avatars/".$row[5].".jpg' onerror=\"this.src='../img/avatars/default.jpg'\">
+								<h4 class='media-heading padding-left'>".$row[8]." ".$row[9]."<span class='pull-right'><abbr class='timeago hidden-xs' title=''>".strftime("%B %d",strtotime($row[3])) .", ".date("g:i a", strtotime($row[4]))."</abbr></span></h4>
+								<p class='padding-left'>Now is following you!</p>
+							</div>
+						</a>
+					</li>
+					<div class='divide-20'></div>";
+				break;		
+		}
+	}
+}
 ?>
-
-
 
 
 

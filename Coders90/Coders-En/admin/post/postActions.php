@@ -1,4 +1,21 @@
+<!--                Copyright (c) 2014 
+José Fernando Flores Santamaría <fer.santamaria@programmer.net>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+-->
 <?php
+	session_save_path("../../sessions/");
 	session_start();
 	error_reporting(0);
 	if(!isset($_SESSION["UserID"]) && $_SESSION["Admin"]!="1"){
@@ -73,14 +90,14 @@
 		$fn=$row[6];
 		$ln=$row[7];
 		$cont=htmlentities($row[2],ENT_NOQUOTES,"UTF-8");
-		$date=date("m-d-Y", strtotime($row[3]));
+		$date=date("d/m/Y", strtotime($row[3]));
 		$hour=date("g:i a", strtotime($row[4]));
 		if ($row[5]=="1") {
 			$state="Visible";
 			$editForm="<input type='submit' name='visiblePost' class='btn btn-danger btn-xs pull-right btnSpace' value='Hide Post'>";
 		} else {
-			$state="No visible";
-			$editForm="<input type='submit' name='noVisiblePost' class='btn btn-success btn-xs pull-right btnSpace' value='Make Visible'>";
+			$state="No visible (Eliminado)";
+			$editForm="<input type='submit' name='noVisiblePost' class='btn btn-success btn-xs pull-right btnSpace' value='Show Post'>";
 		}
 		
 	}
@@ -97,13 +114,13 @@
 
 	if ($totalComments!=0) {
 		$selComments="<div class='pull-right'>
-				<input type='checkbox' id='selPost' name='selPost'><label for='selPost' class='labelMargin'>Select all comments</label>
+				<input type='checkbox' id='selPost' name='selPost'><label for='selPost' class='labelMargin'>Seleccionar todos los comentarios</label>
 			</div>
 		</div>
 		<form method='POST' action='postActions.php?postIdf=".$_GET['postIdf']."'>
 			<div class='col-xs-12 col-md-4'>
-					<input type='submit' name='showComments' class='btn btn-success btn-xs pull-right btnSpace' value='Show comments'>
-					<input type='submit' name='delComments' class='btn btn-danger btn-xs pull-right btnSpace' value='Hide comments'>
+					<input type='submit' name='showComments' class='btn btn-success btn-xs pull-right btnSpace' value='Show Comments'>
+					<input type='submit' name='delComments' class='btn btn-danger btn-xs pull-right btnSpace' value='Hide Comments'>
 			</div>
 			<div class='col-xs-12 col-md-12' >
 				<div class='divide-20'></div>
@@ -117,7 +134,7 @@
 				</div>";
 	} else {
 		$selComments="<div class='pull-right'>
-				<input type='checkbox' id='selPost' name='selPost' disabled><label for='selPost' class='labelMargin'>Select all comments</label>
+				<input type='checkbox' id='selPost' name='selPost' disabled><label for='selPost' class='labelMargin'>Seleccionar todos los comentarios</label>
 			</div>
 		</div>
 		<form method='POST' action='postActions.php?postIdf=".$_GET['postIdf']."'>
@@ -132,7 +149,7 @@
 						<div class='adjust-img-post'>
 							<img class='img-perfil' src='../../img/avatars/".$userId.".jpg' onerror=\'this.src='../img/avatars/default.jpg'\' width='50' height='50'>
 						</div>
-						<pre style='background-color: white;'><a style='text-decoration: none;'><h5 class='comment-name' style='margin-left:10px;'>".$fn." ".$ln."</h5></a><span class='pull-right comment-time'><i class='fa fa-clock-o'></i>".$date." at ".$hour."</span>".$cont."</pre>
+						<pre style='background-color: white;'><a style='text-decoration: none;'><h5 class='comment-name' style='margin-left:10px;'>".$fn." ".$ln."</h5></a><span class='pull-right comment-time'><i class='fa fa-clock-o'></i>".$date." a las ".$hour."</span>".$cont."</pre>
 					</span>
 				</div>";
 	}
@@ -154,12 +171,14 @@
 
 	<script src="../../editor/jquery-ui/js/jquery-1.10.2.js"></script>
 	<script src="../../editor/jquery-ui/js/jquery-ui-1.10.4.js"></script>
-
+	
 	<link href="../../font-awesome/css/font-awesome.min.css" rel="stylesheet">
 	<!-- FONTS -->
 	<link href='../../css/fonts.css' rel='stylesheet' type='text/css'>
 	<!-- Favicon -->
 	<link rel="icon" type="image/png" href="../../img/logo/Fav2.png" />
+
+	
 
 </head>
 <body >
@@ -183,8 +202,8 @@
 						<i class="fa fa-angle-down"></i>
 					</a>
 					<ul class="dropdown-menu">
-						<li><a href="../../profile/"><i class="fa fa-user"></i> My Profile</a></li>
-						<li><a href="../../dashboard/"><i class="fa fa-tachometer"></i> Go to Dashboard</a></li>
+						<li><a href="#"><i class="fa fa-user"></i> My Profile</a></li>
+						<li><a href="../../dashboard/"><i class="fa fa-tachometer"></i> IGo to Dashboard</a></li>
 						<li><a href="../../logout/index.php"><i class="fa fa-power-off"></i> Log Out</a></li>
 					</ul>
 				</li>
@@ -219,7 +238,7 @@
 				</li>
 				<li>
 					<a href="#">
-						<i class="fa fa-users fa-fw"></i><span class="menu-text">Group</span>
+						<i class="fa fa-users fa-fw"></i><span class="menu-text">Groups</span>
 					</a>
 				</li>
 				<li>
@@ -261,7 +280,7 @@
 										<span>CODERS</span>
 										<span>/</span>
 										<span>></span>
-										 - Administration Panels - Posts
+										 - Administration Panel - Posts
 									</h3>
 								</div>
 								<div class="divide-20"></div>
@@ -274,7 +293,7 @@
 							<?php 
 							if(isset($_GET["chg"])){
 								if ($_GET["chg"]==1) {
-									echo"<div class='alert alert-success col-xs-12 col-md-12'>Data has been successfuly updated</div>";
+									echo"<div class='alert alert-success col-xs-12 col-md-12'>Data has been successfully updated</div>";
 								} else {
 									echo"<div class='alert alert-danger col-xs-12 col-md-12'>There was an error updating the data, try again :( </div>";
 								}
@@ -283,13 +302,13 @@
 						</div>
 						<div class="col-xs-12 col-md-12" >
 							<div class="col-xs-12 col-md-2" >
-								<strong><h5>Post by:</h5></strong>
+								<strong><h5>Created by:</h5></strong>
 							</div>
 							<div class="col-xs-12 col-md-10">
 								<h5><?php echo "  ".$fn." ".$ln." (".$userId.")"?></h5>
 							</div>
 							<div class="col-xs-12 col-md-2" >
-								<strong><h5>Date & time:</h5></strong>
+								<strong><h5>Date and Time:</h5></strong>
 							</div>
 							<div class="col-xs-12 col-md-10">
 								<h5><?php echo $date." a las ".$hour;?></h5>
@@ -304,7 +323,7 @@
 								<strong><h5>Comments:</h5></strong>
 							</div>
 							<div class="col-xs-12 col-md-10">
-								<h5><?php echo $totalComments." comments (".$VisibleComments." visible and ".$noVisibleComments." hidden)"?></h5>
+								<h5><?php echo $totalComments." comentarios (".$VisibleComments." visibles y ".$noVisibleComments." no visible)"?></h5>
 							</div>
 						</div>
 						<div class="col-xs-12 col-md-12" >
@@ -336,7 +355,7 @@
 															</div>
 															<div class='col-xs-12 col-md-12'>
 																<div class='col-xs-12 col-md-12' style='word-wrap:break-word;'>
-																	<pre class='visible'><a style='text-decoration: none;' href='../profile/index.php?user=".$row[1]."'><h5 class='comment-name' >"."  ".$row[7]." ".$row[8]."</a></h5><span class='pull-right comment-time'><i class='fa fa-clock-o'></i> ".date("m-d-Y", strtotime($row[4])) ." at ".date("g:i a", strtotime($row[5]))." "."<input type='checkbox' name='commentIdf[]' value='".$row[0]."'></span>".htmlentities($row[2],ENT_NOQUOTES,"UTF-8")."</pre>
+																	<pre class='visible'><a style='text-decoration: none;' href='../profile/index.php?user=".$row[1]."'><h5 class='comment-name' >"."  ".$row[7]." ".$row[8]."</a></h5><span class='pull-right comment-time'><i class='fa fa-clock-o'></i> ".date("d/m/Y", strtotime($row[4])) ." a las ".date("g:i a", strtotime($row[5]))." "."<input type='checkbox' name='commentIdf[]' value='".$row[0]."'></span>".htmlentities($row[2],ENT_NOQUOTES,"UTF-8")."</pre>
 																</div>
 															</div>
 														</span>
@@ -350,7 +369,7 @@
 															</div>
 															<div class='col-xs-12 col-md-12'>
 																<div class='col-xs-12 col-md-12' style='word-wrap:break-word;'>
-																	<pre class='no-visible'><a style='text-decoration: none;' href='../profile/index.php?user=".$row[1]."'><h5 class='comment-name' >"."  ".$row[7]." ".$row[8]."</a></h5><span class='pull-right comment-time'><i class='fa fa-clock-o'></i> ".date("m-d-Y", strtotime($row[4])) ." at ".date("g:i a", strtotime($row[5]))." "."<input type='checkbox' name='commentIdf[]' value='".$row[0]."'></span>".htmlentities($row[2],ENT_NOQUOTES,"UTF-8")."</pre>
+																	<pre class='no-visible'><a style='text-decoration: none;' href='../profile/index.php?user=".$row[1]."'><h5 class='comment-name' >"."  ".$row[7]." ".$row[8]."</a></h5><span class='pull-right comment-time'><i class='fa fa-clock-o'></i> ".date("d/m/Y", strtotime($row[4])) ." a las ".date("g:i a", strtotime($row[5]))." "."<input type='checkbox' name='commentIdf[]' value='".$row[0]."'></span>".htmlentities($row[2],ENT_NOQUOTES,"UTF-8")."</pre>
 																</div>
 															</div>
 														</span>
@@ -393,10 +412,6 @@
 <!-- Core Bootstrap-->
 <!--/PAGE -->
 <!-- JAVASCRIPTS -->
-<!-- JQUERY -->
-<script src="../../js/jquery/jquery-2.0.3.min.js"></script>
-<!-- JQUERY UI-->
-<script src="../../js/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js"></script>
 <!-- AJAX -->
 <script src="../../Func.js"></script>
 <!-- BOOTSTRAP -->

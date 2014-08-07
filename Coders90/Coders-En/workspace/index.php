@@ -1,4 +1,21 @@
+<!--                Copyright (c) 2014 
+José Fernando Flores Santamaría <fer.santamaria@programmer.net>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+-->
 <?php
+	session_save_path("../sessions/");
 	session_start();
 	//error_reporting(0);
 	if(!isset($_SESSION['UserID'])){
@@ -42,6 +59,7 @@
 			header("Location: ../workspace/?chg=0");
 		}
 	}
+	require("../SQLFunc.php");
 ?>
 ﻿<!DOCTYPE html>
 <html lang="en">
@@ -67,7 +85,10 @@
 	<!-- Favicon -->
 	<link rel="shortcut icon" href="../common/img/favicon.png" />
 </head>
-<body >
+<body>
+<div class="overlay-content" id='loader-div'>
+	<center><p class="overlay-icon"><i class="fa fa-spinner fa-spin"></i></p></center>
+</div>
 <!-- Header de Pagina -->
 <header class="navbar clearfix navbar-fixed-top" id="header">
 	<div class="container">
@@ -88,6 +109,25 @@
 		
 		<!-- General Menu -->					
 		<ul class="nav navbar-nav pull-right">
+			<!-- Notifications -->
+			<li class="dropdown" id="header-notification">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+					<i class="fa fa-bell"></i>
+					<span class="badge"><?php echo numberNotifications();?></span>						
+				</a>
+				<ul class="dropdown-menu notification" id="notifications">
+					<li class="dropdown-title">
+						<span><i class="fa fa-bell"></i>Notifications</span>
+					</li>
+					<?php
+					notifList();
+					?>
+					<li class="footer">
+						<a href="../notifications/">See all notifications  <i class="fa fa-arrow-circle-right"></i></a>
+					</li>
+				</ul>
+			</li>
+			<!-- /Notifications -->
 			<!-- User Menu -->
 			<li class="dropdown user" id="header-user">
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -103,7 +143,7 @@
 						}
 					?>
 					<li><a href="../user/"><i class="fa fa-cog"></i> Settings</a></li>
-					<li><a href="../logout/index.php"><i class="fa fa-power-off"></i> Log out</a></li>
+					<li><a href="../logout/index.php"><i class="fa fa-power-off"></i> Log Out</a></li>
 				</ul>
 			</li>
 			<!-- /User Menu -->
@@ -137,8 +177,8 @@
 							</a>
 						</li>
 						<li>
-							<a href="#">
-								<i class="fa fa-calendar fa-fw"></i><span class="menu-text">Planner
+							<a href="../messages/">
+								<i class="fa fa-envelope fa-fw"></i><span class="menu-text">Messages
 								</span>
 							</a>
 						</li>
@@ -189,17 +229,17 @@
 					<!-- /Header de contenido -->
 					<!-- Contenido general -->
 					<div class="row">
-						<div class="col-md-12 pull-right">
+						<div class="col-md-12 ">
 							<div id="newsFeed">
 								<!--/Files-->
 								<?php 
 								if(isset($_GET['chg'])){
 									if ($_GET['chg']==1) {
-										echo"<div class='alert alert-success col-xs-12 col-md-12'>File uploaded successfuly</div>";
+										echo"<div class='alert alert-success col-xs-12 col-md-12'>File uploaded successfully</div>";
 									}elseif ($_GET['chg']==2) {
 										echo"<div class='alert alert-warning col-xs-12 col-md-12'>There is another file with the same name</div>";
 									} else {
-										echo"<div class='alert alert-danger col-xs-12 col-md-12'>There was an error uploading your file, Try again :( </div>";
+										echo"<div class='alert alert-danger col-xs-12 col-md-12'>There was an error uploading the file, try againg :( </div>";
 									}
 								}
 								?>
@@ -231,7 +271,7 @@
 									    </div>
 									    <div class="pull-right">
 									    	<form action="../workspace/" method="POST" name="NewFileUpload" id="NewFileUpload" enctype="multipart/form-data">
-										    	<button class="btn btn-primary pull-right" name="Upload" id="Upload"><input type="file" accept="text/css,text/html,application/javascript" name="FileToUpload" id="FileToUpload" style="overflow: hidden;opacity: 0; position: absolute;border: solid 1px orange; z-index:100;width:75px;"/>File Upload</button>
+										    	<button class="btn btn-primary pull-right" name="Upload" id="Upload"><input type="file" accept="text/css,text/html,application/javascript" name="FileToUpload" id="FileToUpload" style="overflow: hidden;opacity: 0; position: absolute;border: solid 1px orange; z-index:100;width:75px;"/>Upload a file</button>
 												<input name="action" type="hidden" value="upload" /> 
 											</form>
 									    </div>
@@ -248,11 +288,12 @@
 													  	$resultadoJs = strpos($file, ".js");
 													  	
 													  	if ($resultadoHtml==true || $resultadoHtm==true) {
-													  		echo "<div class='col-md-3 idfHtml'>
+													  		echo "<div class='col-md-3 col-xs-6 idfHtml'>
 																	<div>
 													  					<h5><span>".$file."</span>
+													  					<a><span class='pull-right btnSpace'><i class='fa fa-fw fa-times' id='".$file."' onClick='delFile(this)' title='Delete File'></i>	</span>
 													  					<a href='".$dir.$file."' download='".$file."'>
-													  					<span class='pull-right'><i class='fa fa-fw fa-cloud-download' title='Download File'></i></span></a>
+													  					<span class='pull-right'><i class='fa fa-fw fa-cloud-download' title='Download File '></i></span></a>
 													  					<a href='../editor/?id=".$file."&type=html'><span class='pull-right'><i class='fa fa-edit btnSpace' title='Edit File'></i></a></span></h5>
 													  				</div>
 																	<div class='filter-content'>
@@ -261,11 +302,12 @@
 																	</div>
 																</div>";
 													  	} elseif ($resultadoJs==true) {
-													  		echo "<div class='col-md-3 idfJs'>
+													  		echo "<div class='col-md-3 col-xs-6 idfJs'>
 																	<div>
 													  					<h5><span>".$file."</span>
+													  					<a><span class='pull-right btnSpace'><i class='fa fa-fw fa-times' id='".$file."' onClick='delFile(this)' title='Delete File'></i>	</span>
 													  					<a href='".$dir.$file."' download='".$file."'>
-													  					<span class='pull-right'><i class='fa fa-fw fa-cloud-download' title='Download File'></i></span></a>
+													  					<span class='pull-right'><i class='fa fa-fw fa-cloud-download' title='Download File '></i></span></a>
 													  					<a href='../editor/?id=".$file."&type=javascript'><span class='pull-right'><i class='fa fa-edit btnSpace' title='Edit File'></i></a></span></h5>
 													  				</div>
 																	<div class='filter-content'>
@@ -274,11 +316,12 @@
 																	</div>
 																</div>";
 													  	} elseif ($resultadoCss==true) {
-													  		echo "<div class='col-md-3 idfCss'>
+													  		echo "<div class='col-md-3 col-xs-6 idfCss'>
 																	<div>
 													  					<h5><span>".$file."</span>
+													  					<a><span class='pull-right btnSpace'><i class='fa fa-fw fa-times' id='".$file."' onClick='delFile(this)' title='Delete File'></i>	</span>
 													  					<a href='".$dir.$file."' download='".$file."'>
-													  					<span class='pull-right'><i class='fa fa-fw fa-cloud-download' title='Download File'></i></span></a>
+													  					<span class='pull-right'><i class='fa fa-fw fa-cloud-download' title='Download File '></i></span></a>
 													  					<a href='../editor/?id=".$file."&type=css'><span class='pull-right'><i class='fa fa-edit btnSpace' title='Edit File'></i></a></span></h5>
 													  				</div>
 																	<div class='filter-content'>
@@ -288,11 +331,12 @@
 																</div>";
 													  	} else {
 													  		$fileNew=$file.".php";
-													  		echo "<div class='col-md-3 idfPhp'>
+													  		echo "<div class='col-md-3 col-xs-6 idfPhp'>
 													  				<div>
 													  					<h5><span>".$fileNew."</span>
+													  					<a><span class='pull-right btnSpace'><i class='fa fa-fw fa-times' id='".$file."' onClick='delFile(this)' title='Delete File'></i>	</span>
 													  					<a href='".$dir.$file."' download='".$fileNew."'>
-													  					<span class='pull-right'><i class='fa fa-fw fa-cloud-download' title='Download File'></i></span></a>
+													  					<span class='pull-right'><i class='fa fa-fw fa-cloud-download' title='Download File '></i></span></a>
 													  					<a href='../editor/?id=".$file."&type=php'><span class='pull-right'><i class='fa fa-edit btnSpace' title='Edit File'></i></a></span></h5>
 													  				</div>
 																	<div class='filter-content'>
@@ -319,11 +363,8 @@
 		</div>
 	</div>
 </section>
-<div id="dialog-confirm-comment" title="Coders" style="display:none">
-  <p><h3><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></h3></span>¿Realmente desea borrar este comentario?</p>
-</div>
-<div id="dialog-confirm-post" title="Coders" style="display:none">
-  <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span><br>¿Realmente desea borrar esta publicación?</p>
+<div id="dialog-confirm-file" title="Coders" style="display:none">
+  <p><h3><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></h3></span>¿Realmente desea borrar este archivo?</br>Recuerde que no podrá ser recuperado posteriormente</p>
 </div>
 <!-- Core Bootstrap-->
 <!--/PAGE -->
@@ -372,6 +413,30 @@ $("#allBtn").click(function(){
     $('.col-md-3').show("fast");
 });
 
+function delFile(e){
+	$( "#dialog-confirm-file" ).dialog({
+	  resizable: false,
+	  height:200,
+	  width: 500,
+	  modal: true,
+	  buttons: {
+	    "Borrar": function (){
+	      $( this ).dialog( "close" );
+	      	$("#loader-div").css({ display: "block", });
+			var idf=$(e).attr("id");
+	        $.post("userActions.php", 
+		          {idf: idf, action: "delFile"},
+		          function() {
+		          	  location.reload();
+		          }
+		    );
+		},
+	    Cancelar: function() {
+	      $( this ).dialog( "close" );
+	    }
+	  }
+	});
+}
 </script>
 <!-- AJAX -->
 <script src="../Func.js"></script>

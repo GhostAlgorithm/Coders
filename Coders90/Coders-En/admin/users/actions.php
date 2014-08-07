@@ -1,4 +1,21 @@
+<!--                Copyright (c) 2014 
+José Fernando Flores Santamaría <fer.santamaria@programmer.net>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+-->
 <?php
+	session_save_path("../../sessions/");
 	session_start();
 	if(!isset($_SESSION['UserID']) && $_SESSION['Admin']!="1"){
 		header('Location: ../../');
@@ -117,9 +134,9 @@
 						<i class="fa fa-angle-down"></i>
 					</a>
 					<ul class="dropdown-menu">
-						<li><a href="../../profile/"><i class="fa fa-user"></i> My Profile</a></li>
+						<li><a href="#"><i class="fa fa-user"></i> My Profile</a></li>
 						<li><a href="../../dashboard/"><i class="fa fa-tachometer"></i> Go to Dashboard</a></li>
-						<li><a href="../../logout/index.php"><i class="fa fa-power-off"></i> Log Out</a></li>
+						<li><a href="../../logout/index.php"><i class="fa fa-power-off"></i> Log out</a></li>
 					</ul>
 				</li>
 				<!-- /User Menu -->
@@ -152,7 +169,7 @@
 					</a>
 				</li>
 				<li>
-					<a href="#">
+					<a href="../groups/">
 						<i class="fa fa-users fa-fw"></i><span class="menu-text">Groups</span>
 					</a>
 				</li>
@@ -180,7 +197,7 @@
 									<a href="../dashboard/">Administration Panel</a>
 								</li>
 								<li>
-									<a href="../users/">User</a>
+									<a href="../users/">Users</a>
 								</li>
 								<li>
 									<a href="#"><?php echo $fn." ".$ln;?></a>
@@ -207,9 +224,9 @@
 						<?php 
 						if(isset($_GET['chg'])){
 							if ($_GET['chg']==1) {
-								echo"<div class='alert alert-success col-xs-12 col-md-12'>Information has been changed successfully</div>";
+								echo"<div class='alert alert-success col-xs-12 col-md-12'>Data has been successfully updated</div>";
 							} else {
-								echo"<div class='alert alert-danger col-xs-12 col-md-12'>There was an error, Try again :( </div>";
+								echo"<div class='alert alert-danger col-xs-12 col-md-12'>There was an error updating the data, try again :( </div>";
 							}
 						}
 						?>
@@ -217,7 +234,7 @@
 						<div class="divide-20"></div>
 						<div class="box">
 					    	<div class="box-title small">
-								<h4><i class="fa fa-picture-o"></i>Profile Photo</h4>
+								<h4><i class="fa fa-picture-o"></i>Profile Picture</h4>
 							</div>
 							<div class="box-body">
 								<form name="UpPic" id="UpPic" method="post" action="UR.php?user=<?php echo $_GET['user'];?>" enctype="multipart/form-data">
@@ -231,8 +248,8 @@
 										<div class="col-xs-12 col-md-12" style:"border: solid 1px black">
 											<input type="file" name="fileUpload" id="fileUpload" class="form-control" accept="image/*" onChange="fileName()" style="opacity: 0; z-index:100; position:absolute" required/>
 											<div class="input-group">
-												<span class="input-group-addon"><i class="fa fa-picture-o"> Choose a file:</i></span>
-												<input type="text" class="form-control" placeholder="No File Selected" id="selector"/>
+												<span class="input-group-addon"><i class="fa fa-picture-o"> Select a file:</i></span>
+												<input type="text" class="form-control" placeholder="No file selected" id="selector"/>
 											</div>
 											
 											</br></br>
@@ -247,7 +264,7 @@
 						<div class="divide-75"></div>
 						<div class="box">
 					    	<div class="box-title small">
-								<h4><i class="fa fa-edit"></i>General Account Settings</h4>
+								<h4><i class="fa fa-edit"></i>General Settings</h4>
 							</div>
 							<div class="box-body" style="word-wrap: break-word;">
 								<form method="post" action="../users/actions.php?user=<?php echo $_GET['user']; ?>" name="EditData">
@@ -270,10 +287,10 @@
 									</div>
 									<div class="col-xs-12 col-md-12 form-group">
 										<label for="BDate">Birth Date:</label>
-										<input type="date" class="form-control" name="BDate" autocomplete="off" id="BDate" placeholder="dd/mm/yyyy" value="<?php echo $bdate;?>" onBlur="Act()" required/>
+										<input type="date" class="form-control" name="BDate" autocomplete="off" id="BDate" placeholder="01/04/1995" value="<?php echo $bdate;?>" onBlur="Act()" required/>
 									</div>
 									<div class="col-xs-12 col-md-12 form-group">
-										<input type="submit" class="btn btn-primary pull-right" name="EditData" value="Update Information">
+										<input type="submit" class="btn btn-primary pull-right" name="EditData" value="Save">
 									</div>
 								</div>
 								</form>
@@ -282,7 +299,7 @@
 						<div class="divide-50"></div>
 						<div class="box">
 					    	<div class="box-title small">
-								<h4><i class="fa fa-wrench"></i>Others</h4>
+								<h4><i class="fa fa-wrench"></i>Roles</h4>
 							</div>
 							<div class="box-body">
 								<form method="post" action="../users/actions.php?user=<?php echo $_GET['user']; ?>" name="EditRole">
@@ -296,7 +313,7 @@
 											<input type="checkbox" class="chkAdmin" name="blockUser" id="blockUser" <?php if($block==1){echo "checked";}?>/></h4>
 										</div>
 										<div class="col-xs-12 col-md-4">
-											<input type="submit" class="btn btn-primary pull-right" name="editRole" id="editRole" value="Update Information"/></h4>
+											<input type="submit" class="btn btn-primary pull-right" name="editRole" id="editRole" value="Save"/></h4>
 										</div>
 									</div>
 								</form>

@@ -1,12 +1,29 @@
+<!--                Copyright (c) 2014 
+José Fernando Flores Santamaría <fer.santamaria@programmer.net>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+-->
 <?php
+	session_save_path("../sessions/");
 	session_start();
 	error_reporting(0);
 	if(!isset($_SESSION['UserID'])){
 		header('Location: ../');
 	}
-
+	require("../SQLFunc.php");
 ?>	
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
@@ -35,8 +52,11 @@
 		var dialog = $( "#new-dialog" ).dialog({
 			  autoOpen: false,
 			  modal: true,
-			  buttons: {
-			    Create: function() {
+			  resizable: false,
+		      buttons: {
+			    Crear: function() {
+			    	$( this ).dialog( "close" );
+			    	$("#loader-div").css({ display: "block", });
 			    	if ($("#groupName").val()!="") {
 			    		var gName=$("#groupName").val();
 				    	var gContent=$("#groupContent").val();
@@ -53,11 +73,11 @@
 				    	$("#groupName").css({ border: "solid 1px red", });
 			    	};
 			    },
-			    Cancel: function() {
+			    Cancelar: function() {
 			      $( this ).dialog( "close" );
 			    }
 			  },
-			  Close: function() {
+			  Cerrar: function() {
 			    form[ 0 ].reset();
 			  }
 			});
@@ -70,12 +90,15 @@
 
 		$("#groupName").focus(function () {
 			$("#groupName").css({ border: "solid 1px #aaaaaa"});
-			$("#groupName").attr("placeholder", "");	
+			$("#groupName").attr("placeholder", "");
 		})
 	});
 	</script>
 </head>
 <body >
+<div class="overlay-content" id='loader-div'>
+	<center><p class="overlay-icon"><i class="fa fa-spinner fa-spin"></i></p></center>
+</div>
 <!-- Header de Pagina -->
 <header class="navbar clearfix navbar-fixed-top" id="header">
 	<div class="container">
@@ -96,6 +119,25 @@
 		
 		<!-- General Menu -->					
 		<ul class="nav navbar-nav pull-right">
+			<!-- Notifications -->
+			<li class="dropdown" id="header-notification">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+					<i class="fa fa-bell"></i>
+					<span class="badge"><?php echo numberNotifications();?></span>						
+				</a>
+				<ul class="dropdown-menu notification" id="notifications">
+					<li class="dropdown-title">
+						<span><i class="fa fa-bell"></i>Notifications</span>
+					</li>
+					<?php
+					notifList();
+					?>
+					<li class="footer">
+						<a href="../notifications/">See all notifications  <i class="fa fa-arrow-circle-right"></i></a>
+					</li>
+				</ul>
+			</li>
+			<!-- /Notifications -->
 			<!-- User Menu -->
 			<li class="dropdown user" id="header-user">
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -145,8 +187,8 @@
 					</a>
 				</li>
 				<li>
-					<a href="#">
-						<i class="fa fa-calendar fa-fw"></i><span class="menu-text">Planner
+					<a href="../messages/">
+						<i class="fa fa-envelope fa-fw"></i><span class="menu-text">Messages
 						</span>
 					</a>
 				</li>
@@ -190,7 +232,7 @@
 									<h3 class="content-title pull-left">
 										Groups
 									</h3>
-									<span><button class="btn btn-info btn-group pull-right" id="newGroup">Create Group</button></span>
+									<span><button class="btn btn-info btn-group pull-right" id="newGroup">Create a group</button></span>
 								</div>
 							</div>
 						</div>
@@ -201,13 +243,13 @@
 						<div class="col-xs-12 col-md-12">
 							<div class="box">
 						    	<div class="box-title small">
-									<h4><i class="fa fa-search"></i>Search for groups</h4>
+									<h4><i class="fa fa-search"></i>Search Groups</h4>
 								</div>
 							</div>
 							<div class="col-xs-12 col-md-10 col-md-offset-1">
 								<div class="input-group search-admin">
 									<span class="input-group-addon"><i class="fa fa-search"></i></span>
-									<input type="text" id="searchbar-admin" class="form-control"  autocomplete="off" placeholder="Groups"/>
+									<input type="text" id="searchbar-admin" class="form-control"  autocomplete="off" placeholder="Grupos"/>
 								</div>
 								<div id="targetDivGroups" class="search-div search-box">
 								</div>
@@ -221,7 +263,6 @@
 								</div>
 							</div>
 							<?php 
-								require("../SQLFunc.php");
 								myOwnGroups();
 							?>
 						</div>
@@ -235,9 +276,9 @@
 							<?php 
 								myGroups();
 							?>
-						</div>					
+						</div>
 					</div>
-					<div id="new-dialog" title="New Group">
+					<div id="new-dialog" title="Nuevo Grupo">
 					  <form>
 					    <fieldset class="ui-helper-reset">
 					      <label for="groupName">Name:</label>
@@ -260,7 +301,7 @@
 							<option value="Visual Basic .NET">Visual Basic .NET</option>
 							<option value="Otro">Otro</option>
 					      </select>
-					      <label for="groupColor">Choose a theme:</label>
+					      <label for="groupColor">Select a theme:</label>
 					      <select name="groupColor" id="groupColor" style="display:block" class="ui-widget-content ui-corner-all">
 					      	<option value="E74C3C" style="background-color:#E74C3C; color: white;">Alizarin</option>
 					      	<option value="E67E22" style="background-color:#E67E22; color: white;">Carrot</option>
@@ -285,7 +326,6 @@
 <!-- AJAX -->
 <script src="../Func.js"></script>
 <script type="text/javascript">
-	
 	$( "#searchbar-admin" ).keyup(function(){
 		var text = $( "#searchbar-admin" ).val();
 		var text2=$.trim(text);
@@ -307,8 +347,6 @@
 			$("#targetDiv").html("");
 		};
 	});
-
-
 </script>
 <!-- BOOTSTRAP -->
 <script src="../bootstrap-dist/js/bootstrap.min.js"></script>

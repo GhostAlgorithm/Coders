@@ -1,10 +1,40 @@
+<!--                Copyright (c) 2014 
+José Fernando Flores Santamaría <fer.santamaria@programmer.net>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+-->
 <?php
+	session_save_path("../sessions/");
 	session_start();
 	error_reporting(0);
 	if(!isset($_SESSION['UserID'])){
 		header('Location: ../');
 	}
+	date_default_timezone_set("America/El_Salvador");
 
+	if(isset($_GET['group'])){
+		include("../BDD.php");
+		$query="SELECT * FROM groups where GroupID='".$_GET['group']."'";
+		$preValid=mysql_query($query,$dbconn);
+		$valid=mysql_num_rows($preValid);
+
+		if ($valid==0) {
+			header('Location: ../error/404.html');
+		}
+	} else {
+		header('Location: ../groups/');
+	}
 
 	include("../BDD.php");
 	$query="SELECT groups.*, users.UserID, users.Name, users.LastName FROM groups INNER JOIN users ON groups.UserID = users.UserID WHERE groups.GroupID='".$_GET['group']."'";	
@@ -14,7 +44,7 @@
 		$gName=$row[1];
 		$gColor=$row[4];
 		$gCreator=$row[7]." ".$row[8];
-
+		$idCreator=$row[3];
 	}
 
 	if (isset($_POST["action"]) && $_POST["action"] == "upload"){
@@ -40,6 +70,20 @@
 
 					if (move_uploaded_file($tempName, $uploadFile)) {
 					    header("Location: workspace.php?group=".$_GET['group']."&chg=1");
+
+					    //Notifications de subida de archivo en grupo
+						$query="SELECT UserID FROM user_group WHERE GroupID='".$_GET['group']."'";
+						$sql=mysql_query($query,$dbconn);
+
+						$udate=date("Y-m-d");
+						$uhour=date("H:i:s");
+
+						while ($row=mysql_fetch_array($sql)) {
+							if ($row[0]!=$_SESSION['UserID']) {
+								$insertNotif="INSERT INTO notifications VALUES ('','".$row[0]."','0','".$udate."','".$uhour."','".$_SESSION['UserID']."','4','".$_GET['group']."')";
+								$resNotif=mysql_query($insertNotif,$dbconn);
+							}
+						}
 					} else {
 					    header("Location: workspace.php?group=".$_GET['group']."&chg=0");
 					}
@@ -53,8 +97,10 @@
 		} else {
 			header("Location: workspace.php?group=".$_GET['group']."&chg=0");
 		}
-	}	
-?>	
+	}
+	
+	require("../SQLFunc.php");
+?>
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -100,6 +146,25 @@
 		
 		<!-- General Menu -->					
 		<ul class="nav navbar-nav pull-right">
+			<!-- Notifications -->
+			<li class="dropdown" id="header-notification">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+					<i class="fa fa-bell"></i>
+					<span class="badge"><?php echo numberNotifications();?></span>						
+				</a>
+				<ul class="dropdown-menu notification" id="notifications">
+					<li class="dropdown-title">
+						<span><i class="fa fa-bell"></i>Notifications</span>
+					</li>
+					<?php
+					notifList();
+					?>
+					<li class="footer">
+						<a href="../notifications/">See all notifications  <i class="fa fa-arrow-circle-right"></i></a>
+					</li>
+				</ul>
+			</li>
+			<!-- /Notifications -->
 			<!-- User Menu -->
 			<li class="dropdown user" id="header-user">
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -115,7 +180,7 @@
 						}
 					?>
 					<li><a href="../user/"><i class="fa fa-cog"></i> Settings</a></li>
-					<li><a href="../logout/index.php"><i class="fa fa-power-off"></i> Log out</a></li>
+					<li><a href="../logout/index.php"><i class="fa fa-power-off"></i> Log Out</a></li>
 				</ul>
 			</li>
 			<!-- /User Menu -->
@@ -149,8 +214,8 @@
 							</a>
 						</li>
 						<li>
-							<a href="#">
-								<i class="fa fa-calendar fa-fw"></i><span class="menu-text">Planner
+							<a href="../messages/">
+								<i class="fa fa-envelope fa-fw"></i><span class="menu-text">Messages
 								</span>
 							</a>
 						</li>
@@ -204,23 +269,23 @@
 					<!-- /Header de contenido -->
 					<!-- Contenido general -->
 					<div class="row">
-						<div class="col-md-12 pull-right">
+						<div class="col-md-12">
 							<div id="newsFeed">
 								<!--/Files-->
 								<?php 
 								if(isset($_GET['chg'])){
 									if ($_GET['chg']==1) {
-										echo"<div class='alert alert-success col-xs-12 col-md-12'>File uploaded successfuly</div>";
+										echo"<div class='alert alert-success col-xs-12 col-md-12'>File uploaded successfully</div>";
 									}elseif ($_GET['chg']==2) {
 										echo"<div class='alert alert-warning col-xs-12 col-md-12'>There is another file with the same name</div>";
 									} else {
-										echo"<div class='alert alert-danger col-xs-12 col-md-12'>There was an error uploading your file, Try again :( </div>";
+										echo"<div class='alert alert-danger col-xs-12 col-md-12'>There was an error uploading the file, try againg :( </div>";
 									}
 								}
 								?>
 								<div class="box">
 									<div class="box-title">
-										<h4><i class="fa fa-bars"></i><?php echo $gName;?> Files</h4>
+										<h4><i class="fa fa-bars"></i> <?php echo $gName." ";?> Files</h4>
 									</div>
 									<div class="box-body clearfix">
 									   <div class="divide-40 visible-xs"></div>
@@ -233,7 +298,7 @@
 												  <button class="btn btn-info" id="cssBtn">CSS</button>
 												  <button class="btn btn-success" id="jsBtn">Javascript</button>
 											  </div>
-											  <div class="visible-xs">
+											  <div class="visible-xs pull-left">
 												   <select id="e1" class="form-control">
 														<option>All</option>
 														<option>HTML</option>
@@ -246,7 +311,7 @@
 									    </div>
 									    <div class="pull-right">
 									    	<form action="workspace.php?group=<?php echo $_GET['group'];?>" method="POST" name="NewFileUpload" id="NewFileUpload" enctype="multipart/form-data">
-										    	<button class="btn btn-primary pull-right" name="Upload" id="Upload"><input type="file" accept="text/css,text/html,application/javascript" name="FileToUpload" id="FileToUpload" style="overflow: hidden;opacity: 0; position: absolute;border: solid 1px orange; z-index:100;width:75px;"/>File Upload</button>
+										    	<button class="btn btn-primary pull-right" name="Upload" id="Upload"><input type="file" accept="text/css,text/html,application/javascript" name="FileToUpload" id="FileToUpload" style="overflow: hidden;opacity: 0; position: absolute;border: solid 1px orange; z-index:100;width:75px;"/>Upload File</button>
 												<input name="action" type="hidden" value="upload" /> 
 											</form>
 									    </div>
@@ -335,10 +400,10 @@
 	</div>
 </section>
 <div id="dialog-confirm-comment" title="Coders" style="display:none">
-  <p><h3><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></h3></span>¿Realmente desea borrar este comentario?</p>
+  <p><h3><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></h3></span>Are you sure you want to delete this?</p>
 </div>
 <div id="dialog-confirm-post" title="Coders" style="display:none">
-  <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span><br>¿Realmente desea borrar esta publicación?</p>
+  <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span><br>Are you sure you want to delete this?</p>
 </div>
 <!-- Core Bootstrap-->
 <!--/PAGE -->

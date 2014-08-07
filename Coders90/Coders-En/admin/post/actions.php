@@ -1,4 +1,21 @@
+<!--                Copyright (c) 2014 
+José Fernando Flores Santamaría <fer.santamaria@programmer.net>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+-->
 <?php
+	session_save_path("../../sessions/");
 	session_start();
 	error_reporting(0);
 	if(!isset($_SESSION['UserID']) && $_SESSION['Admin']!="1"){
@@ -108,9 +125,9 @@
 						<i class="fa fa-angle-down"></i>
 					</a>
 					<ul class="dropdown-menu">
-						<li><a href="../../profile/"><i class="fa fa-user"></i> My Profile</a></li>
+						<li><a href="#"><i class="fa fa-user"></i> My Profile</a></li>
 						<li><a href="../../dashboard/"><i class="fa fa-tachometer"></i> Go to Dashboard</a></li>
-						<li><a href="../../logout/index.php"><i class="fa fa-power-off"></i> Log Out</a></li>
+						<li><a href="../../logout/index.php"><i class="fa fa-power-off"></i> Log out</a></li>
 					</ul>
 				</li>
 				<!-- /User Menu -->
@@ -143,7 +160,7 @@
 					</a>
 				</li>
 				<li>
-					<a href="#">
+					<a href="../groups/">
 						<i class="fa fa-users fa-fw"></i><span class="menu-text">Groups</span>
 					</a>
 				</li>
@@ -199,7 +216,7 @@
 							<?php 
 							if(isset($_GET['chg'])){
 								if ($_GET['chg']==1) {
-									echo"<div class='alert alert-success col-xs-12 col-md-12'>Data has been successfuly updated</div>";
+									echo"<div class='alert alert-success col-xs-12 col-md-12'>Data has been successfully updated</div>";
 								} else {
 									echo"<div class='alert alert-danger col-xs-12 col-md-12'>There was an error updating the data, try again :( </div>";
 								}
@@ -216,11 +233,11 @@
 								<form method="POST" action="actions.php?user=<?php echo $_GET['user'];?>">
 									<div class="col-xs-12 col-md-12">
 										<div class="col-xs-6 col-md-3">
-											<input type='checkbox' id='selPost' name="selPost" class="pull-left"><label for="selPost" class="labelMargin">Select All</label>
+											<input type='checkbox' id='selPost' name="selPost" class="pull-left"><label for="selPost" class="labelMargin">Select all</label>
 										</div>
 										<div class="col-xs-6 col-md-9">
-											<input type='submit' name="showPost" class="btn btn-success btn-xs pull-right btnSpace" value="Show Posts">
-											<input type='submit' name="delPost" class="btn btn-danger btn-xs pull-right btnSpace" value="Hide Posts">
+											<input type='submit' name="showPost" class="btn btn-success btn-xs pull-right btnSpace" value="Show">
+											<input type='submit' name="delPost" class="btn btn-danger btn-xs pull-right btnSpace" value="Hide">
 										</div>
 									</div>
 									<div class="divide-15"></div>
@@ -285,10 +302,6 @@
 <!-- Core Bootstrap-->
 <!--/PAGE -->
 <!-- JAVASCRIPTS -->
-<!-- JQUERY -->
-<script src="../../js/jquery/jquery-2.0.3.min.js"></script>
-<!-- JQUERY UI-->
-<script src="../../js/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js"></script>
 <!-- AJAX -->
 <script src="../../Func.js"></script>
 <!-- BOOTSTRAP -->

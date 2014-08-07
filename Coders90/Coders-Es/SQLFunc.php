@@ -65,12 +65,12 @@ function NewsFeed(){
 							</div>
 						</div>
 						<div class='col-xs-2 col-md-1'> 
-							<a><h3 class='pull-right'><span class='compose tip-left' title='Comentarios'><i class='fa fa-comments' idf='".$row[0]."''></i></span></h3></a>
+							<a><h3 class='pull-right'><span class='compose tip-left' title='Comentarios'><i class='fa fa-comments' idf='".$row[7]."''></i></span></h3></a>
 						</div>
 					</span>
 				</div>	
 			</div>
-			<div class='comments pull-right' id='".$row[0]."'>
+			<div class='comments pull-right' id='".$row[7]."'>
 			</diV>
 			<div class='divide-25'></div>";
 		} else {
@@ -98,12 +98,12 @@ function NewsFeed(){
 							</div>
 						</div>
 						<div class='col-xs-2 col-md-1'> 
-							<a><h3 class='pull-right'><span class='compose tip-left' title='Comentarios'><i class='fa fa-comments' idf='".$row[0]."''></i></span></h3></a>
+							<a><h3 class='pull-right'><span class='compose tip-left' title='Comentarios'><i class='fa fa-comments' idf='".$row[7]."''></i></span></h3></a>
 						</div>
 					</span>
 				</div>	
 			</div>
-			<div class='comments pull-right' id='".$row[0]."'>
+			<div class='comments pull-right' id='".$row[7]."'>
 			</diV>
 			<div class='divide-25'></div>";
 		}

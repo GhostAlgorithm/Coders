@@ -1,8 +1,64 @@
+/*                Copyright (c) 2014 
+José Fernando Flores Santamaría <fer.santamaria@programmer.net>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+/*
+
 /*! Core Bootstrap -- Clases Personalizadas Coders*/
 
 /*-----------------------------------------------------------------------------------*/
 /*	Clases Personalizadas
 /*-----------------------------------------------------------------------------------*/
+textarea{
+  max-width: 100%; 
+}
+
+.overlay-icon{
+  color:white; 
+  font-size:10em; 
+  vertical-align:middle; 
+  display: block; 
+  margin-top:1.50em;
+}
+
+.overlay-content{
+  position: fixed; 
+  width:100%; 
+  height:100%; 
+  background-color:rgba(0, 0, 0, 0.3); 
+  z-index:100; 
+  display:none;
+}
+
+.member-img{
+  border-radius: 100px; 
+  border: solid 2px #3498DB; 
+  display: block; 
+  margin: auto; 
+  margin-top: 10%;
+  width: 65px;
+  height: 65px;
+}
+
+.user-container{
+  height:165px; 
+  text-align:center; 
+  background-color: #ffffff; 
+  border: solid 5px #f5f6f6; 
+  border-radius: 10px;
+}
+
 .styleLess,
 .styleLess:hover{
   color: #555555;
@@ -319,6 +375,12 @@ table #users > thead > tr > th: last-child{
 .divide-15 {
   clear: both;
   height: 15px;
+  width: 100%;
+}
+
+.divide-5 {
+  clear: both;
+  height: 5px;
   width: 100%;
 }
 
@@ -6769,6 +6831,9 @@ fieldset[disabled] .btn-yellow.active {
   padding: 0 12px 0 0 !important;
 }
 /* Content */
+#content-full{
+  margin-left: 100px !important;
+}
 
 #main-content-2{
   display: block;

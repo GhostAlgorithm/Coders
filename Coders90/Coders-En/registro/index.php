@@ -1,4 +1,22 @@
+<!--                Copyright (c) 2014 
+José Fernando Flores Santamaría <fer.santamaria@programmer.net>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+-->
+
 <?php
+	session_save_path("../sessions/");
 	if(isset($_SESSION['UserID'])){
 		header('Location: ../dashboard/');
 	}
@@ -28,8 +46,13 @@
 					$_SESSION['UserName']=$firstname;
 					$_SESSION['UserLast']=$lastname;
 					$_SESSION['UserEmail']=$email;
+					$_SESSION['Admin']="0";
 					
 					$insFoll="INSERT INTO following VALUES('','".$userid."','".$userid."','1','1')";
+					$result=mysql_query($insFoll);
+
+					$rdate=date("Y-m-d");
+					$insFoll="INSERT INTO userinformation VALUES('".$userid."','".$rdate."','','','','','','','')";
 					$result=mysql_query($insFoll);
 
 					mkdir("../editor/codefiles/".$userid, 0777);
@@ -39,10 +62,10 @@
 					}
 					
 				} else {
-					echo"<script>alert('There was an error creatinig your account, try again'".mysql_error().");window.history.back();</script>";
+					echo"<script>alert('There was an error creating the account, try again'".mysql_error().");window.history.back();</script>";
 				}
 			}else{
-				echo"<script>alert('This email was previously registered by another user');window.history.back();</script>";
+				echo"<script>alert('This mail is registered, try with a new one');window.history.back();</script>";
 			}
          
             mysql_close();
@@ -52,7 +75,7 @@
 <!DOCTYPE HTML>
 <html lang="en">
 		<head>
-			<title>Sign Up!</title>
+			<title>Registro</title>
 			<!--Bootstrap / css / fonts-->
 			<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">		
 			<link rel="stylesheet" type="text/css" href="../css/style.css" >
@@ -70,7 +93,7 @@
 			<div class="row">
 				<div class="col-xs-12  col-md-12">
 					<div class="col-xs-12 col-md-12">
-						<h1 align="center">Sign Up!</h1>
+						<h1 align="center">New Coder!</h1>
 					</div>
 				</div>
 				<div class="col-xs-12  col-md-12" id="panel">
@@ -98,7 +121,7 @@
 							</div>
 						</div>
 						<div class="col-xs-12 col-md-12">
-							<h4>Re-enter Email:</h4>
+							<h4>Re-enter email:</h4>
 							<div class="input-group">
 								<span class="input-group-addon"><i class="fa fa-envelope"></i></span>
 								<input type="email" class="form-control" placeholder="mail@domain.com" id="ReEmail" name='ReEmail' required/>
@@ -122,7 +145,7 @@
 							<div class="divide-20"></div>
 							<div class="pull-left" style="color: white; font-size:20px;" id="notification"></div>
 							<button class="btn btn-lg btn-success pull-right spcBtn btnForm" type="submit" id='SignUp' name='SignUp'>Sign Up</button>
-							<a href="../" class="pull-right"><button class="btn btn-lg btn-warning btnForm" type="button">Go back</button></a> 
+							<a href="../" class="pull-right"><button class="btn btn-lg btn-warning btnForm" type="button">Go Back</button></a> 
 						</div>
 					</div>
 					<div class="col-md-2"></div>
@@ -149,7 +172,7 @@
 	                		$("#Email").css({ border: "solid 3px red", });
 	                		$("#ReEmail").css({ border: "solid 3px red", });
 	                		$('#SignUp').attr("disabled", true);
-	                		$('#notification').html("This email was previously registered");
+	                		$('#notification').html("This email was previously register");
 	                	} else{
 	                		$("#Email").css({ border: "solid 3px #31E229", });
 	                		$("#ReEmail").css({ border: "solid 3px #31E229", });
@@ -209,7 +232,7 @@
 			pdate=py+pm+pd;
 
 			if(Number(pdate)>Number(actdate)){
-				$('#notification').html("invalid Date");	
+				$('#notification').html("Invalid Date");	
 			} 
 		});
 		

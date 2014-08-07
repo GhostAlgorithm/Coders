@@ -1,5 +1,21 @@
+<!--                Copyright (c) 2014 
+José Fernando Flores Santamaría <fer.santamaria@programmer.net>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+-->
 <?php
-	setlocale(LC_ALL,"US");
+	session_save_path("sessions/");
 	session_start();
 	$idf=$_GET['vineta'];
 	$parts=explode("-", $idf);
@@ -19,7 +35,7 @@
 							</div>
 							<div class='col-xs-12 col-md-12'>
 								<div class='col-xs-12 col-md-12' style='word-wrap:break-word;'>
-									<pre><a style='text-decoration: none;' href='../profile/index.php?user=".$row[1]."'><h5 class='comment-name' >"."  ".$row[7]." ".$row[8]."</a></h5><span class='pull-right comment-time'><i class='fa fa-clock-o'></i> ".strftime("%B %d",strtotime($row[4])) .", ".date("g:i a", strtotime($row[5]))." "."<i class='fa fa-times-circle delete-comment' title='Delete comment' idf='".$row[0]."' post-idf='".$row[2]."' onClick='delComment(this)'></i></span>".htmlentities($row[3],ENT_NOQUOTES,"UTF-8")."</pre>
+									<pre><a style='text-decoration: none;' href='../profile/index.php?user=".$row[1]."'><h5 class='comment-name' >"."  ".$row[7]." ".$row[8]."</a></h5><span class='pull-right comment-time'><i class='fa fa-clock-o'></i> ".strftime("%B %d",strtotime($row[4])) .", ".date("g:i a", strtotime($row[5]))." "."<i class='fa fa-times-circle delete-comment' title='Delete Comment' idf='".$row[0]."' post-idf='".$row[2]."' onClick='delComment(this)'></i></span>".htmlentities($row[3],ENT_NOQUOTES,"UTF-8")."</pre>
 								</div>
 							</div>
 						</span>
@@ -34,7 +50,7 @@
 							</div>
 							<div class='col-xs-12 col-md-12'>
 								<div class='col-xs-12 col-md-12' style='word-wrap:break-word;'>
-									<pre><a style='text-decoration: none;' href='../profile/index.php?user=".$row[1]."'><h5 class='comment-name' >"."  ".$row[7]." ".$row[8]."</a></h5><span class='pull-right comment-time'><i class='fa fa-clock-o'></i> ".strftime("%B %d",strtotime($row[4])) .", ".date("g:i a", strtotime($row[5]))." "."<i class='fa fa-times-circle delete-comment' title='Delete comment' idf='".$row[0]."' post-idf='".$row[2]."' onClick='delComment(this)'></i></span>".htmlentities($row[3],ENT_NOQUOTES,"UTF-8")."</pre>
+									<pre><a style='text-decoration: none;' href='../profile/index.php?user=".$row[1]."'><h5 class='comment-name' >"."  ".$row[7]." ".$row[8]."</a></h5><span class='pull-right comment-time'><i class='fa fa-clock-o'></i> ".strftime("%B %d",strtotime($row[4])) .", ".date("g:i a", strtotime($row[5]))." "."<i class='fa fa-times-circle delete-comment' title='Delete Comment' idf='".$row[0]."' post-idf='".$row[2]."' onClick='delComment(this)'></i></span>".htmlentities($row[3],ENT_NOQUOTES,"UTF-8")."</pre>
 								</div>
 							</div>
 						</span>

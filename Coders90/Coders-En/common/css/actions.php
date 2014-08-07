@@ -33,7 +33,7 @@
 
 ?>	
 ﻿<!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 	<title>Coders {}</title>
@@ -78,9 +78,9 @@
 						<i class="fa fa-angle-down"></i>
 					</a>
 					<ul class="dropdown-menu">
-						<li><a href="#"><i class="fa fa-user"></i> Mi Perfil</a></li>
-						<li><a href="../../dashboard/"><i class="fa fa-tachometer"></i> Ir al Dashboard</a></li>
-						<li><a href="../../logout/index.php"><i class="fa fa-power-off"></i> Cerrar Sesión</a></li>
+						<li><a href="#"><i class="fa fa-user"></i> My Profile</a></li>
+						<li><a href="../../dashboard/"><i class="fa fa-tachometer"></i> Go to Dashboard</a></li>
+						<li><a href="../../logout/index.php"><i class="fa fa-power-off"></i> Log out</a></li>
 					</ul>
 				</li>
 				<!-- /User Menu -->
@@ -96,7 +96,7 @@
 		<div class="sidebar-menu nav-collapse">
 			<div class="divide-20"></div>
 			<div id="search-bar">
-				<input type="text" id="searchbar" class="search" onkeyup="getData('../cons.php', 'targetDiv',tag())" onkeydown="borrar('targetDiv')" autocomplete="off" placeholder="Nombre - Apellido - Email"><i class="fa fa-search search-icon"></i>
+				<input type="text" id="searchbar" class="search" onkeyup="getData('../cons.php', 'targetDiv',tag())" onkeydown="borrar('targetDiv')" autocomplete="off" placeholder="Name - Last Name - Email"><i class="fa fa-search search-icon"></i>
 			</div>
 			<div id="targetDiv" class="search-div search-box">
 			</div>

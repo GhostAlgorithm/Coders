@@ -1,4 +1,21 @@
+<!--                Copyright (c) 2014 
+José Fernando Flores Santamaría <fer.santamaria@programmer.net>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+-->
 <?php
+	session_save_path("../../sessions/");
 	error_reporting(0);
 
 	session_start();
@@ -56,7 +73,7 @@
 
 	<script src="../../editor/jquery-ui/js/jquery-1.10.2.js"></script>
 	<script src="../../editor/jquery-ui/js/jquery-ui-1.10.4.js"></script>
-
+	
 	<link href="../../font-awesome/css/font-awesome.min.css" rel="stylesheet">
 	<!-- FONTS -->
 	<link href='../../css/fonts.css' rel='stylesheet' type='text/css'>
@@ -93,10 +110,10 @@
 							<i class="fa fa-angle-down"></i>
 						</a>
 						<ul class="dropdown-menu">
-							<li><a href="../../profile/"><i class="fa fa-user"></i> My profile</a></li>
-							<li><a href="../../dashboard/"><i class="fa fa-tachometer"></i> Go to Dashboard</a></li>
+							<li><a href="#"><i class="fa fa-user"></i> Mi Perfil</a></li>
+							<li><a href="../../dashboard/"><i class="fa fa-tachometer"></i> Ir al Dashboard</a></li>
 							<li><a href="../user/"><i class="fa fa-cog"></i> Configuración</a></li>
-							<li><a href="../../logout/index.php"><i class="fa fa-power-off"></i> Log Out</a></li>
+							<li><a href="../../logout/index.php"><i class="fa fa-power-off"></i> Cerrar Sesión</a></li>
 						</ul>
 					</li>
 					<!-- /User Menu -->
@@ -113,7 +130,7 @@
 					<div class="sidebar-menu nav-collapse">
 						<div class="divide-20"></div>
 						<div id="search-bar">
-							<input type="text" id="searchbar" class="search" placeholder="Name - Last Name - Email" autocomplete="off"><i class="fa fa-search search-icon"></i>
+							<input type="text" id="searchbar" class="search" autocomplete="off"><i class="fa fa-search search-icon"></i>
 						</div>
 						<div id="targetDiv" class="search-div search-box">
 						</div>
@@ -121,7 +138,7 @@
 						<ul>
 						<li>
 							<a href="../users/">
-								<i class="fa fa-user fa-fw"></i> <span class="menu-text">Users</span>
+								<i class="fa fa-user fa-fw"></i> <span class="menu-text">Usuarios</span>
 							</a>					
 						</li>
 						<li>
@@ -131,12 +148,12 @@
 						</li>
 						<li>
 							<a href="#">
-								<i class="fa fa-users fa-fw"></i><span class="menu-text">Groups</span>
+								<i class="fa fa-users fa-fw"></i><span class="menu-text">Grupos</span>
 							</a>
 						</li>
 						<li>
 							<a href="#">
-								<i class="fa fa-briefcase fa-fw"></i><span class="menu-text">More...
+								<i class="fa fa-briefcase fa-fw"></i><span class="menu-text">Otros...
 								</span>
 							</a>
 						</li>
@@ -160,13 +177,13 @@
 											<a href="../dashboard/">Home</a>
 										</li>
 										<li>
-											<a href="#">Settings</a>
+											<a href="#">Configuración</a>
 										</li>
 									</ul>
 									<!-- /BREADCRUMBS -->
 									<div class="clearfix">
 										<h3 class="content-title pull-left">
-											Settings - Administrator Account
+											Configuración - Cuenta de Administrador
 										</h3>
 									</div>
 								</div>
@@ -180,7 +197,7 @@
 
 							if(isset($_GET["up"])){
 								if ($_GET["up"]==0) {
-									echo"<div class='alert alert-danger col-xs-12 col-md-12'>There was an error, Try again :( </div>";
+									echo"<div class='alert alert-danger col-xs-12 col-md-12'>Error, Try again :( </div>";
 								} else {
 									echo"<div class='alert alert-success col-xs-12 col-md-12'>Profile picture has been changed successfully</div>";
 								}
@@ -188,13 +205,13 @@
 							}
 
 							if($edit==1){
-								echo"<div class='alert alert-danger col-xs-12 col-md-12'>There was an error, Try again :( </div>";
+								echo"<div class='alert alert-danger col-xs-12 col-md-12'>Error, Try again :( </div>";
 							} elseif ($edit==2) {
 								echo"<div class='alert alert-success col-xs-12 col-md-12'>Information has been changed successfully</div>";
 							}?>
 							    <div class="box">
 							    	<div class="box-title small">
-										<h4><i class="fa fa-picture-o"></i>Profile Photo</h4>
+										<h4><i class="fa fa-picture-o"></i>Foto de Perfil</h4>
 									</div>
 									<div class="box-body">
 										<form name="UpPic" id="UpPic" method="post" action="UR.php" enctype="multipart/form-data">
@@ -203,13 +220,13 @@
 											</div>
 											<div class="col-xs-12 col-md-9">
 												<div class="col-xs-12 col-md-12">
-													<h4>Upload a new photo:</h4>
+													<h4>Sube una nueva foto:</h4>
 												</div>
 												<div class="col-xs-12 col-md-12" style:"border: solid 1px black">
 													<input type="file" name="fileUpload" id="fileUpload" class="form-control" accept="image/*" onChange="fileName()" style="opacity: 0; z-index:100; position:absolute" required/>
 													<div class="input-group">
-														<span class="input-group-addon"><i class="fa fa-picture-o"> Choose File:</i></span>
-														<input type="text" class="form-control" placeholder="No file selected" id="selector"/>
+														<span class="input-group-addon"><i class="fa fa-picture-o"> Selecciona Archivo:</i></span>
+														<input type="text" class="form-control" placeholder="Ningún Archivo Seleccionado" id="selector"/>
 													</div>
 													
 													</br></br>
@@ -224,25 +241,25 @@
 								<div class="divide-75"></div>
 								<div class="box">
 							    	<div class="box-title small">
-										<h4><i class="fa fa-edit"></i>General Account Settings</h4>
+										<h4><i class="fa fa-edit"></i>Configuración General</h4>
 									</div>
 									<div class="box-body" style="word-wrap: break-word;">
 										<form method="post" action="../user/" name="EditData">
 											<div>
 											<div class="col-xs-12 col-md-6 form-group">
-												<label for="FirstName">First Name:</label>
-												<input type="text" class="form-control" name="FirstName" placeholder="First Name" value="<?php echo $fn;?>" required/>
+												<label for="FirstName">Nombre:</label>
+												<input type="text" class="form-control" name="FirstName" placeholder="Nombre" value="<?php echo $fn;?>" required/>
 											</div>
 											<div class="col-xs-12 col-md-6 form-group">
-												<label for="LastName">Last Name:</label>
-												<input type="text" class="form-control" name="LastName" placeholder="Last Name" value="<?php echo $ln;?>"required/>
+												<label for="LastName">Apellido:</label>
+												<input type="text" class="form-control" name="LastName" placeholder="Apellido" value="<?php echo $ln;?>"required/>
 											</div>
 											<div class="col-xs-12 col-md-12 form-group">
-												<label for="Pass1">Password:</label>
+												<label for="Pass1">Contraseña:</label>
 												<input type="password" class="form-control" name="Pass1" id="Pass1" value="************" placeholder="*****" required/>
 											</div>
 											<div class="col-xs-12 col-md-12 form-group">
-												<label for="Pass2">Re-enter Password:</label>
+												<label for="Pass2">Re-escriba Contraseña:</label>
 												<input type="password" class="form-control" name="Pass2" id="Pass2" value="************" placeholder="*****" onBlur='email()' required/>
 											</div>
 											<div class="col-xs-12 col-md-12 form-group">
@@ -250,11 +267,11 @@
 												<input type="email" class="form-control" name="Mail" id="Mail" placeholder="mail@mail.com" value="<?php echo $mail;?>" required/>
 											</div>
 											<div class="col-xs-12 col-md-12 form-group">
-												<label for="BDate">Bith Date:</label>
-												<input type="date" class="form-control" name="BDate" id="BDate" placeholder="dd/mm/yyyy" value="<?php echo $fnac;?>" onBlur="Act()" required/>
+												<label for="BDate">Fecha de Nacimiento:</label>
+												<input type="date" class="form-control" name="BDate" id="BDate" placeholder="01/04/1995" value="<?php echo $fnac;?>" onBlur="Act()" required/>
 											</div>
 											<div class="col-xs-12 col-md-12 form-group">
-												<input type="submit" class="btn btn-primary pull-right" name="EditData" value="Update Information">
+												<input type="submit" class="btn btn-primary pull-right" name="EditData" value="Guardar Cambios">
 											</div>
 										</div>
 										</form>
@@ -271,21 +288,17 @@
 	<!--/PAGE -->
 	<!-- JAVASCRIPTS -->
 	<script type="text/javascript">
-	$( "#searchbar" ).keyup(function(){
-		var text = $( "#searchbar" ).val();
-		var text2=$.trim(text);
+		$( "#searchbar" ).keyup(function(){
+			var text = $( "#searchbar" ).val();
+			var text2=$.trim(text);
 
-		if (text2!="" && text.length>2) {
-			getData('../consAdmin.php', 'targetDiv',tag());
-		} else {
-			$("#targetDiv").html("");
-		};
-	});	
+			if (text2!="" && text.length>2) {
+				getData('../consAdmin.php', 'targetDiv',tag());
+			} else {
+				$("#targetDiv").html("");
+			};
+		});	
 	</script>
-	<!-- JQUERY -->
-	<script src="../../js/jquery/jquery-2.0.3.min.js"></script>
-	<!-- JQUERY UI-->
-	<script src="../../js/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js"></script>
 	<!-- AJAX -->
 	<script src="../../Func.js"></script>
 	<!-- BOOTSTRAP -->
