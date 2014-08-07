@@ -119,7 +119,7 @@ José Fernando Flores Santamaría <fer.santamaria@programmer.net>
 						</li>
 						<li>
 							<a href="#">
-								<i class="fa fa-briefcase fa-fw"></i><span class="menu-text">Otros...
+								<i class="fa fa-briefcase fa-fw"></i><span class="menu-text">Ayuda
 								</span>
 							</a>
 						</li>
@@ -175,7 +175,7 @@ José Fernando Flores Santamaría <fer.santamaria@programmer.net>
 								<a href="../groups/"><button class="btn btn-lg btn-warning col-xs-12 col-md-12 btn-editor">Grupos</button></a>
 							</div>
 							<div class="col-xs-12 col-md-3 clearfix div-editor">
-								<a href=""><button class="btn btn-lg btn-purple col-xs-12 col-md-12 btn-editor">Otros</button></a>
+								<a href=""><button class="btn btn-lg btn-purple col-xs-12 col-md-12 btn-editor">Ayuda</button></a>
 							</div>
 							<div class="hidden-xs col-md-3 clearfix btn-editor"></div>
 						</div>

@@ -207,7 +207,7 @@ José Fernando Flores Santamaría <fer.santamaria@programmer.net>
 										<span>></span>
 									</h3>
 								</div>
-								<div class="description">One line of code can change the world!</div>
+								<div class="description">¡Una línea de código puede cambiar al mundo!</div>
 							</div>
 						</div>
 					</div>

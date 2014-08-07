@@ -55,10 +55,12 @@ José Fernando Flores Santamaría <fer.santamaria@programmer.net>
 	$query="SELECT * FROM following where UserID='".$user."'";
 	$preFollowers=mysql_query($query,$dbconn);
 	$Followers=mysql_num_rows($preFollowers);
+	$Followers=$Followers-1;
 
 	$query="SELECT * FROM following where FollowerID='".$user."'";
 	$preFollowings=mysql_query($query,$dbconn);
 	$Following=mysql_num_rows($preFollowings);
+	$Following=$Following-1;
 
 	$query="SELECT * FROM post where UserID='".$user."' AND View='1'";
 	$prePost=mysql_query($query,$dbconn);

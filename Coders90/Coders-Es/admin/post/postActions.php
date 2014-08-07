@@ -243,7 +243,7 @@ José Fernando Flores Santamaría <fer.santamaria@programmer.net>
 				</li>
 				<li>
 					<a href="#">
-						<i class="fa fa-briefcase fa-fw"></i><span class="menu-text">Otros...
+						<i class="fa fa-briefcase fa-fw"></i><span class="menu-text">Ayuda
 						</span>
 					</a>
 				</li>
