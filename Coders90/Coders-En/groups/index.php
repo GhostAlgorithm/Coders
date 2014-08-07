@@ -249,7 +249,7 @@ José Fernando Flores Santamaría <fer.santamaria@programmer.net>
 							<div class="col-xs-12 col-md-10 col-md-offset-1">
 								<div class="input-group search-admin">
 									<span class="input-group-addon"><i class="fa fa-search"></i></span>
-									<input type="text" id="searchbar-admin" class="form-control"  autocomplete="off" placeholder="Grupos"/>
+									<input type="text" id="searchbar-admin" class="form-control"  autocomplete="off" placeholder="Groups"/>
 								</div>
 								<div id="targetDivGroups" class="search-div search-box">
 								</div>

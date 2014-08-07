@@ -15,6 +15,6 @@ José Fernando Flores Santamaría <fer.santamaria@programmer.net>
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 <?php 
-	$dbconn=mysql_connect("localhost", "root", "codersv");
+	$dbconn=mysql_connect("localhost", "root", "");
 	mysql_select_db("coders",$dbconn) OR DIE ("Error: No es posible establecer la conexión con la base de datos");
 ?>
